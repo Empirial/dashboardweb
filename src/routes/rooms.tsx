@@ -247,6 +247,7 @@ function Rooms() {
       )}
 
       <BookRoomDialog
+        key={`${dialog?.room ?? "any"}-${dialog?.start ?? "today"}`}
         open={!!dialog}
         onClose={() => setDialog(null)}
         presetRoom={dialog?.room}
