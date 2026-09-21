@@ -52,10 +52,10 @@ function Rooms() {
   return (
     <AppShell>
       <div className="grid grid-cols-2 gap-2 lg:grid-cols-4">
-        <Stat label="Clean" value={counts.clean ?? 0} sub="ready to sell" />
-        <Stat label="Dirty" value={counts.dirty ?? 0} sub="housekeeping queue" />
-        <Stat label="Occupied" value={counts.occupied ?? 0} sub="in house" />
-        <Stat label="Out of order" value={counts.ooo ?? 0} sub="maintenance" />
+        <Stat label="Clean" value={counts["clean"] ?? 0} sub="ready to sell" />
+        <Stat label="Dirty" value={counts["dirty"] ?? 0} sub="housekeeping queue" />
+        <Stat label="Occupied" value={counts["occupied"] ?? 0} sub="in house" />
+        <Stat label="Out of order" value={counts["ooo"] ?? 0} sub="maintenance" />
       </div>
 
       <Panel

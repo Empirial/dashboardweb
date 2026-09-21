@@ -37,7 +37,7 @@ function Pos() {
     { item: posItems.find((i) => i.id === "d2")!, qty: 2 },
     { item: posItems.find((i) => i.id === "d3")!, qty: 1 },
   ]);
-  const [room, setRoom] = useState(occupiedRooms[5]?.number ?? occupiedRooms[0].number);
+  const [room, setRoom] = useState(occupiedRooms[5]?.number ?? occupiedRooms[0]?.number ?? "209");
   const [receipt, setReceipt] = useState<string | null>(null);
 
   const add = (item: PosItem) => {
