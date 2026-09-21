@@ -1,56 +1,123 @@
 import { Link } from "@tanstack/react-router";
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
+import {
+  BedDouble,
+  CalendarRange,
+  ChevronLeft,
+  LayoutDashboard,
+  LineChart,
+  Receipt,
+  Users,
+} from "lucide-react";
 
 const navItems = [
-  { to: "/", label: "Desk" },
-  { to: "/rooms", label: "Rooms" },
-  { to: "/bookings", label: "Bookings" },
-  { to: "/pos", label: "POS" },
-  { to: "/guests", label: "Guests" },
-  { to: "/reports", label: "Reports" },
+  { to: "/", label: "Desk", icon: LayoutDashboard },
+  { to: "/rooms", label: "Rooms", icon: BedDouble },
+  { to: "/bookings", label: "Bookings", icon: CalendarRange },
+  { to: "/pos", label: "POS", icon: Receipt },
+  { to: "/guests", label: "Guests", icon: Users },
+  { to: "/reports", label: "Reports", icon: LineChart },
 ] as const;
 
 export function AppShell({ children }: { children: ReactNode }) {
+  const [collapsed, setCollapsed] = useState(false);
+
   return (
-    <div className="min-h-screen bg-paper text-ink font-body">
-      <header className="sticky top-0 z-30 border-b border-line bg-popover/70 backdrop-blur-md">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-          <div className="flex items-center gap-2.5">
-            <div className="grid size-8 place-items-center rounded-lg bg-brass">
-              <span className="bell font-display text-sm font-bold text-brass-foreground">E</span>
-            </div>
-            <div className="leading-none">
-              <div className="font-display text-[15px] font-bold tracking-tight">Empirial Hotel</div>
-              <div className="mt-0.5 text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
-                Front Desk · Ops
+    <div className="flex min-h-screen w-full bg-background text-foreground">
+      <aside
+        className={`sticky top-0 hidden h-screen shrink-0 flex-col border-r border-border bg-paper transition-[width] duration-150 md:flex ${
+          collapsed ? "w-14" : "w-56"
+        }`}
+      >
+        <div className="flex h-14 items-center gap-2.5 border-b border-border px-3">
+          <div className="grid size-7 shrink-0 place-items-center rounded-md bg-ink">
+            <span className="font-display text-xs font-semibold text-paper">E</span>
+          </div>
+          {!collapsed && (
+            <div className="min-w-0 leading-none">
+              <div className="truncate font-display text-[13px] font-semibold tracking-tight">
+                Empirial Hotel
+              </div>
+              <div className="mt-1 text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+                Property Ops
               </div>
             </div>
-          </div>
-          <div className="text-right leading-none">
-            <div className="font-mono text-[11px] tnum">14:32</div>
-            <div className="text-[10px] text-muted-foreground">Tue 12 Mar</div>
-          </div>
+          )}
         </div>
-        <nav className="mx-auto flex max-w-6xl gap-1 overflow-x-auto px-2 pb-2">
+
+        <nav className="flex flex-1 flex-col gap-0.5 p-2">
           {navItems.map((item) => (
             <Link
               key={item.to}
               to={item.to}
               activeOptions={{ exact: item.to === "/" }}
-              className="shrink-0 rounded-full px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors"
-              activeProps={{ className: "bg-ink text-paper" }}
+              title={item.label}
+              className="flex items-center gap-2.5 rounded-md px-2.5 py-2 text-[13px] font-medium text-muted-foreground transition-colors duration-100 hover:bg-secondary hover:text-foreground"
+              activeProps={{ className: "bg-secondary text-foreground" }}
+            >
+              <item.icon className="size-4 shrink-0" strokeWidth={1.75} />
+              {!collapsed && <span>{item.label}</span>}
+            </Link>
+          ))}
+        </nav>
+
+        <button
+          onClick={() => setCollapsed((c) => !c)}
+          className="flex items-center gap-2 border-t border-border px-3 py-3 text-[11px] font-medium text-muted-foreground transition-colors duration-100 hover:text-foreground"
+        >
+          <ChevronLeft
+            className={`size-4 transition-transform duration-150 ${collapsed ? "rotate-180" : ""}`}
+            strokeWidth={1.75}
+          />
+          {!collapsed && <span>Collapse</span>}
+        </button>
+      </aside>
+
+      <div className="flex min-w-0 flex-1 flex-col">
+        <header className="sticky top-0 z-30 border-b border-border bg-paper/90 backdrop-blur">
+          <div className="flex h-14 items-center justify-between px-4 md:px-6">
+            <div className="flex items-center gap-2.5 md:hidden">
+              <div className="grid size-7 place-items-center rounded-md bg-ink">
+                <span className="font-display text-xs font-semibold text-paper">E</span>
+              </div>
+              <span className="font-display text-[13px] font-semibold tracking-tight">
+                Empirial Hotel
+              </span>
+            </div>
+            <div className="hidden text-[11px] uppercase tracking-[0.14em] text-muted-foreground md:block">
+              Front Desk
+            </div>
+            <div className="flex items-center gap-4">
+              <span className="font-display text-[12px] font-medium tnum">14:32</span>
+              <span className="text-[11px] text-muted-foreground">Tue 12 Mar</span>
+              <span className="grid size-7 place-items-center rounded-full bg-secondary font-display text-[10px] font-medium">
+                RM
+              </span>
+            </div>
+          </div>
+        </header>
+
+        {/* Mobile nav */}
+        <nav className="flex gap-1 overflow-x-auto border-b border-border bg-paper px-3 py-2 md:hidden">
+          {navItems.map((item) => (
+            <Link
+              key={item.to}
+              to={item.to}
+              activeOptions={{ exact: item.to === "/" }}
+              className="shrink-0 rounded-md px-2.5 py-1.5 text-[12px] font-medium text-muted-foreground"
+              activeProps={{ className: "bg-secondary text-foreground" }}
             >
               {item.label}
             </Link>
           ))}
         </nav>
-      </header>
 
-      <main className="mx-auto max-w-6xl space-y-4 px-4 py-4">{children}</main>
+        <main className="flex-1 space-y-4 px-4 py-5 md:px-6 md:py-6">{children}</main>
 
-      <footer className="pb-6 pt-1 text-center text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
-        Empirial Hotel · Property Ops v2.4
-      </footer>
+        <footer className="px-4 pb-6 pt-2 text-[10px] uppercase tracking-[0.14em] text-muted-foreground md:px-6">
+          Empirial Hotel · Property Ops v2.4
+        </footer>
+      </div>
     </div>
   );
 }
@@ -67,14 +134,16 @@ export function Panel({
   className?: string;
 }) {
   return (
-    <section className={`panel rise p-3 ${className}`}>
+    <section className={`panel ${className}`}>
       {(title || action) && (
-        <div className="mb-2 flex items-center justify-between">
-          {title && <h2 className="font-display text-sm font-bold tracking-tight">{title}</h2>}
+        <div className="flex items-center justify-between border-b border-border px-4 py-3">
+          {title && (
+            <h2 className="font-display text-[13px] font-semibold tracking-tight">{title}</h2>
+          )}
           {action}
         </div>
       )}
-      {children}
+      <div className="p-4">{children}</div>
     </section>
   );
 }
@@ -91,12 +160,14 @@ export function Stat({
   subTone?: "muted" | "positive";
 }) {
   return (
-    <div className="panel-sm rise p-3">
+    <div className="panel-sm p-4">
       <div className="text-[10px] uppercase tracking-[0.14em] text-muted-foreground">{label}</div>
-      <div className="mt-1 font-mono text-2xl font-semibold tnum">{value}</div>
+      <div className="mt-2 font-display text-[28px] font-medium leading-none tracking-tight tnum">
+        {value}
+      </div>
       {sub && (
         <div
-          className={`mt-0.5 text-[10px] ${subTone === "positive" ? "text-positive" : "text-muted-foreground"}`}
+          className={`mt-2 text-[11px] ${subTone === "positive" ? "text-positive" : "text-muted-foreground"}`}
         >
           {sub}
         </div>
