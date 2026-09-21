@@ -232,5 +232,6 @@ export const posOutlets = [
   { name: "Room Service", checks: 19, sales: 3080 },
 ];
 
+// Deterministic ZAR formatting (avoids SSR/client locale mismatches).
 export const rand = (value: number) =>
-  "R" + value.toLocaleString("en-ZA", { maximumFractionDigits: 0 }).replace(/,/g, " ");
+  "R" + Math.round(value).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
