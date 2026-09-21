@@ -35,10 +35,10 @@ export function BookRoomDialog({
   open: boolean;
   onClose: () => void;
   onConfirm: (draft: BookingDraft) => void;
-  presetRoom?: string;
-  presetStart?: string;
-  confirmLabel?: string;
-  source?: Reservation["source"];
+  presetRoom?: string | undefined;
+  presetStart?: string | undefined;
+  confirmLabel?: string | undefined;
+  source?: Reservation["source"] | undefined;
 }) {
   const reservations = useReservations();
   const [guest, setGuest] = useState("");
