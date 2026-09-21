@@ -19,11 +19,12 @@ export const statusLabel: Record<RoomStatus, string> = {
   ooo: "OOO",
 };
 
+// Minimal status treatment: hairline border with a thin coloured left rule.
 export const statusClasses: Record<RoomStatus, string> = {
-  clean: "bg-clean/10 text-clean-foreground ring-1 ring-clean/25",
-  dirty: "bg-dirty/10 text-dirty-foreground ring-1 ring-dirty/25",
-  occupied: "bg-occupied/10 text-occupied-foreground ring-1 ring-occupied/25",
-  ooo: "bg-ooo/10 text-ooo-foreground ring-1 ring-ooo/25",
+  clean: "border border-border border-l-2 border-l-clean bg-paper text-clean-foreground",
+  dirty: "border border-border border-l-2 border-l-dirty bg-paper text-dirty-foreground",
+  occupied: "border border-border border-l-2 border-l-occupied bg-paper text-occupied-foreground",
+  ooo: "border border-border border-l-2 border-l-ooo bg-paper text-ooo-foreground",
 };
 
 export const statusDot: Record<RoomStatus, string> = {
