@@ -34,11 +34,15 @@ export const addDays = (key: string, n: number) => {
   return dayKey(d);
 };
 
-export const shortDay = (key: string) =>
-  parseDay(key).toLocaleDateString("en-ZA", { day: "2-digit", month: "short" });
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const WEEKDAYS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 
-export const weekdayLetter = (key: string) =>
-  parseDay(key).toLocaleDateString("en-ZA", { weekday: "short" }).slice(0, 2);
+export const shortDay = (key: string) => {
+  const d = parseDay(key);
+  return `${String(d.getDate()).padStart(2, "0")} ${MONTHS[d.getMonth()]}`;
+};
+
+export const weekdayLetter = (key: string) => WEEKDAYS[parseDay(key).getDay()] ?? "";
 
 export const isWeekend = (key: string) => [0, 6].includes(parseDay(key).getDay());
 
