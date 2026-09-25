@@ -14,11 +14,22 @@ type ProductState = {
 };
 
 const ProductContext = createContext<ProductState | null>(null);
+let sessionNiche: Niche = "hospitality";
+let sessionDark = false;
+let sessionCart: CartLine[] = [];
 
 export function ProductProvider({ children }: { children: ReactNode }) {
-  const [niche, setNiche] = useState<Niche>("hospitality");
-  const [dark, setDark] = useState(false);
-  const [cart, setCart] = useState<CartLine[]>([]);
+  const [niche, setNicheState] = useState<Niche>(sessionNiche);
+  const [dark, setDarkState] = useState(sessionDark);
+  const [cart, setCartState] = useState<CartLine[]>(sessionCart);
+
+  const setCart: React.Dispatch<React.SetStateAction<CartLine[]>> = (next) => {
+    setCartState((current) => {
+      const value = typeof next === "function" ? next(current) : next;
+      sessionCart = value;
+      return value;
+    });
+  };
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", dark);
@@ -27,11 +38,15 @@ export function ProductProvider({ children }: { children: ReactNode }) {
   const value = useMemo<ProductState>(() => ({
     niche,
     setNiche: (next) => {
-      setNiche(next);
+      sessionNiche = next;
+      setNicheState(next);
       setCart([]);
     },
     dark,
-    setDark,
+    setDark: (next) => {
+      sessionDark = next;
+      setDarkState(next);
+    },
     cart,
     setCart,
     addToCart: (line) => setCart((current) => {
