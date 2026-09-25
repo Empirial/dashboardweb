@@ -10,15 +10,40 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppointmentsRouteImport } from './routes/appointments'
+import { Route as BillingRouteImport } from './routes/billing'
 import { Route as BookingsRouteImport } from './routes/bookings'
+import { Route as CatalogRouteImport } from './routes/catalog'
+import { Route as CrewRouteImport } from './routes/crew'
+import { Route as CustomersRouteImport } from './routes/customers'
+import { Route as FloorPlanRouteImport } from './routes/floor-plan'
 import { Route as GuestsRouteImport } from './routes/guests'
+import { Route as InventoryRouteImport } from './routes/inventory'
+import { Route as JobsRouteImport } from './routes/jobs'
+import { Route as KitchenRouteImport } from './routes/kitchen'
+import { Route as PackagesRouteImport } from './routes/packages'
+import { Route as PartsRouteImport } from './routes/parts'
 import { Route as PosRouteImport } from './routes/pos'
+import { Route as QuotesRouteImport } from './routes/quotes'
 import { Route as ReportsRouteImport } from './routes/reports'
 import { Route as RoomsRouteImport } from './routes/rooms'
+import { Route as SchedulingRouteImport } from './routes/scheduling'
+import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as StaffRouteImport } from './routes/staff'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppointmentsRoute = AppointmentsRouteImport.update({
+  id: '/appointments',
+  path: '/appointments',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BillingRoute = BillingRouteImport.update({
+  id: '/billing',
+  path: '/billing',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BookingsRoute = BookingsRouteImport.update({
@@ -26,14 +51,64 @@ const BookingsRoute = BookingsRouteImport.update({
   path: '/bookings',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CatalogRoute = CatalogRouteImport.update({
+  id: '/catalog',
+  path: '/catalog',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CrewRoute = CrewRouteImport.update({
+  id: '/crew',
+  path: '/crew',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CustomersRoute = CustomersRouteImport.update({
+  id: '/customers',
+  path: '/customers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FloorPlanRoute = FloorPlanRouteImport.update({
+  id: '/floor-plan',
+  path: '/floor-plan',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GuestsRoute = GuestsRouteImport.update({
   id: '/guests',
   path: '/guests',
   getParentRoute: () => rootRouteImport,
 } as any)
+const InventoryRoute = InventoryRouteImport.update({
+  id: '/inventory',
+  path: '/inventory',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JobsRoute = JobsRouteImport.update({
+  id: '/jobs',
+  path: '/jobs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KitchenRoute = KitchenRouteImport.update({
+  id: '/kitchen',
+  path: '/kitchen',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PackagesRoute = PackagesRouteImport.update({
+  id: '/packages',
+  path: '/packages',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PartsRoute = PartsRouteImport.update({
+  id: '/parts',
+  path: '/parts',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PosRoute = PosRouteImport.update({
   id: '/pos',
   path: '/pos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuotesRoute = QuotesRouteImport.update({
+  id: '/quotes',
+  path: '/quotes',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ReportsRoute = ReportsRouteImport.update({
@@ -46,48 +121,186 @@ const RoomsRoute = RoomsRouteImport.update({
   path: '/rooms',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SchedulingRoute = SchedulingRouteImport.update({
+  id: '/scheduling',
+  path: '/scheduling',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StaffRoute = StaffRouteImport.update({
+  id: '/staff',
+  path: '/staff',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/appointments': typeof AppointmentsRoute
+  '/billing': typeof BillingRoute
   '/bookings': typeof BookingsRoute
+  '/catalog': typeof CatalogRoute
+  '/crew': typeof CrewRoute
+  '/customers': typeof CustomersRoute
+  '/floor-plan': typeof FloorPlanRoute
   '/guests': typeof GuestsRoute
+  '/inventory': typeof InventoryRoute
+  '/jobs': typeof JobsRoute
+  '/kitchen': typeof KitchenRoute
+  '/packages': typeof PackagesRoute
+  '/parts': typeof PartsRoute
   '/pos': typeof PosRoute
+  '/quotes': typeof QuotesRoute
   '/reports': typeof ReportsRoute
   '/rooms': typeof RoomsRoute
+  '/scheduling': typeof SchedulingRoute
+  '/settings': typeof SettingsRoute
+  '/staff': typeof StaffRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/appointments': typeof AppointmentsRoute
+  '/billing': typeof BillingRoute
   '/bookings': typeof BookingsRoute
+  '/catalog': typeof CatalogRoute
+  '/crew': typeof CrewRoute
+  '/customers': typeof CustomersRoute
+  '/floor-plan': typeof FloorPlanRoute
   '/guests': typeof GuestsRoute
+  '/inventory': typeof InventoryRoute
+  '/jobs': typeof JobsRoute
+  '/kitchen': typeof KitchenRoute
+  '/packages': typeof PackagesRoute
+  '/parts': typeof PartsRoute
   '/pos': typeof PosRoute
+  '/quotes': typeof QuotesRoute
   '/reports': typeof ReportsRoute
   '/rooms': typeof RoomsRoute
+  '/scheduling': typeof SchedulingRoute
+  '/settings': typeof SettingsRoute
+  '/staff': typeof StaffRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/appointments': typeof AppointmentsRoute
+  '/billing': typeof BillingRoute
   '/bookings': typeof BookingsRoute
+  '/catalog': typeof CatalogRoute
+  '/crew': typeof CrewRoute
+  '/customers': typeof CustomersRoute
+  '/floor-plan': typeof FloorPlanRoute
   '/guests': typeof GuestsRoute
+  '/inventory': typeof InventoryRoute
+  '/jobs': typeof JobsRoute
+  '/kitchen': typeof KitchenRoute
+  '/packages': typeof PackagesRoute
+  '/parts': typeof PartsRoute
   '/pos': typeof PosRoute
+  '/quotes': typeof QuotesRoute
   '/reports': typeof ReportsRoute
   '/rooms': typeof RoomsRoute
+  '/scheduling': typeof SchedulingRoute
+  '/settings': typeof SettingsRoute
+  '/staff': typeof StaffRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/bookings' | '/guests' | '/pos' | '/reports' | '/rooms'
+  fullPaths:
+    | '/'
+    | '/appointments'
+    | '/billing'
+    | '/bookings'
+    | '/catalog'
+    | '/crew'
+    | '/customers'
+    | '/floor-plan'
+    | '/guests'
+    | '/inventory'
+    | '/jobs'
+    | '/kitchen'
+    | '/packages'
+    | '/parts'
+    | '/pos'
+    | '/quotes'
+    | '/reports'
+    | '/rooms'
+    | '/scheduling'
+    | '/settings'
+    | '/staff'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/bookings' | '/guests' | '/pos' | '/reports' | '/rooms'
+  to:
+    | '/'
+    | '/appointments'
+    | '/billing'
+    | '/bookings'
+    | '/catalog'
+    | '/crew'
+    | '/customers'
+    | '/floor-plan'
+    | '/guests'
+    | '/inventory'
+    | '/jobs'
+    | '/kitchen'
+    | '/packages'
+    | '/parts'
+    | '/pos'
+    | '/quotes'
+    | '/reports'
+    | '/rooms'
+    | '/scheduling'
+    | '/settings'
+    | '/staff'
   id:
-    '__root__' | '/' | '/bookings' | '/guests' | '/pos' | '/reports' | '/rooms'
+    | '__root__'
+    | '/'
+    | '/appointments'
+    | '/billing'
+    | '/bookings'
+    | '/catalog'
+    | '/crew'
+    | '/customers'
+    | '/floor-plan'
+    | '/guests'
+    | '/inventory'
+    | '/jobs'
+    | '/kitchen'
+    | '/packages'
+    | '/parts'
+    | '/pos'
+    | '/quotes'
+    | '/reports'
+    | '/rooms'
+    | '/scheduling'
+    | '/settings'
+    | '/staff'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AppointmentsRoute: typeof AppointmentsRoute
+  BillingRoute: typeof BillingRoute
   BookingsRoute: typeof BookingsRoute
+  CatalogRoute: typeof CatalogRoute
+  CrewRoute: typeof CrewRoute
+  CustomersRoute: typeof CustomersRoute
+  FloorPlanRoute: typeof FloorPlanRoute
   GuestsRoute: typeof GuestsRoute
+  InventoryRoute: typeof InventoryRoute
+  JobsRoute: typeof JobsRoute
+  KitchenRoute: typeof KitchenRoute
+  PackagesRoute: typeof PackagesRoute
+  PartsRoute: typeof PartsRoute
   PosRoute: typeof PosRoute
+  QuotesRoute: typeof QuotesRoute
   ReportsRoute: typeof ReportsRoute
   RoomsRoute: typeof RoomsRoute
+  SchedulingRoute: typeof SchedulingRoute
+  SettingsRoute: typeof SettingsRoute
+  StaffRoute: typeof StaffRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -99,11 +312,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/appointments': {
+      id: '/appointments'
+      path: '/appointments'
+      fullPath: '/appointments'
+      preLoaderRoute: typeof AppointmentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/billing': {
+      id: '/billing'
+      path: '/billing'
+      fullPath: '/billing'
+      preLoaderRoute: typeof BillingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/bookings': {
       id: '/bookings'
       path: '/bookings'
       fullPath: '/bookings'
       preLoaderRoute: typeof BookingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/catalog': {
+      id: '/catalog'
+      path: '/catalog'
+      fullPath: '/catalog'
+      preLoaderRoute: typeof CatalogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/crew': {
+      id: '/crew'
+      path: '/crew'
+      fullPath: '/crew'
+      preLoaderRoute: typeof CrewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/customers': {
+      id: '/customers'
+      path: '/customers'
+      fullPath: '/customers'
+      preLoaderRoute: typeof CustomersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/floor-plan': {
+      id: '/floor-plan'
+      path: '/floor-plan'
+      fullPath: '/floor-plan'
+      preLoaderRoute: typeof FloorPlanRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/guests': {
@@ -113,11 +368,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GuestsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/inventory': {
+      id: '/inventory'
+      path: '/inventory'
+      fullPath: '/inventory'
+      preLoaderRoute: typeof InventoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/jobs': {
+      id: '/jobs'
+      path: '/jobs'
+      fullPath: '/jobs'
+      preLoaderRoute: typeof JobsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kitchen': {
+      id: '/kitchen'
+      path: '/kitchen'
+      fullPath: '/kitchen'
+      preLoaderRoute: typeof KitchenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/packages': {
+      id: '/packages'
+      path: '/packages'
+      fullPath: '/packages'
+      preLoaderRoute: typeof PackagesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/parts': {
+      id: '/parts'
+      path: '/parts'
+      fullPath: '/parts'
+      preLoaderRoute: typeof PartsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/pos': {
       id: '/pos'
       path: '/pos'
       fullPath: '/pos'
       preLoaderRoute: typeof PosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quotes': {
+      id: '/quotes'
+      path: '/quotes'
+      fullPath: '/quotes'
+      preLoaderRoute: typeof QuotesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reports': {
@@ -134,16 +431,52 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RoomsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/scheduling': {
+      id: '/scheduling'
+      path: '/scheduling'
+      fullPath: '/scheduling'
+      preLoaderRoute: typeof SchedulingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/staff': {
+      id: '/staff'
+      path: '/staff'
+      fullPath: '/staff'
+      preLoaderRoute: typeof StaffRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AppointmentsRoute: AppointmentsRoute,
+  BillingRoute: BillingRoute,
   BookingsRoute: BookingsRoute,
+  CatalogRoute: CatalogRoute,
+  CrewRoute: CrewRoute,
+  CustomersRoute: CustomersRoute,
+  FloorPlanRoute: FloorPlanRoute,
   GuestsRoute: GuestsRoute,
+  InventoryRoute: InventoryRoute,
+  JobsRoute: JobsRoute,
+  KitchenRoute: KitchenRoute,
+  PackagesRoute: PackagesRoute,
+  PartsRoute: PartsRoute,
   PosRoute: PosRoute,
+  QuotesRoute: QuotesRoute,
   ReportsRoute: ReportsRoute,
   RoomsRoute: RoomsRoute,
+  SchedulingRoute: SchedulingRoute,
+  SettingsRoute: SettingsRoute,
+  StaffRoute: StaffRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

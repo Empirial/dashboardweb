@@ -11,6 +11,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { ProductProvider } from "../lib/product";
 
 function NotFoundComponent() {
   return (
@@ -77,16 +78,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Empirial Hotel · Property Ops" },
+      { title: "Empirial POS · Operations Platform" },
       {
         name: "description",
-        content: "Front-desk, housekeeping and point-of-sale dashboard for Empirial Hotel.",
+        content: "A configurable point-of-sale and operations platform for service businesses.",
       },
-      { name: "author", content: "Empirial Hotel" },
-      { property: "og:title", content: "Empirial Hotel · Property Ops" },
+      { name: "author", content: "Empirial POS" },
+      { property: "og:title", content: "Empirial POS · Operations Platform" },
       {
         property: "og:description",
-        content: "Front-desk, housekeeping and point-of-sale dashboard for Empirial Hotel.",
+        content: "A configurable point-of-sale and operations platform for service businesses.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -130,8 +131,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <ProductProvider><Outlet /></ProductProvider>
     </QueryClientProvider>
   );
 }

@@ -8,3 +8,6 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Keep every industry in one registry-driven mock product context so navigation and shared pages change without forked apps.
+- Preserve Hospitality as the default niche because existing booking and POS workflows depend on it.

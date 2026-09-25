@@ -1,154 +1,22 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { AppShell, Panel, Stat } from "@/components/AppShell";
-import { bookings, kpis, rand, rooms, statusDot, statusLabel, statusClasses } from "@/lib/hotel-data";
+import { ArrowUpRight, ChevronRight } from "lucide-react";
+import { AppShell, PageIntro, Panel, Stat } from "@/components/AppShell";
+import { Button } from "@/components/ui/button";
+import { nicheConfigs, weekSeries } from "@/lib/platform-data";
+import { useProduct } from "@/lib/product";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "Front Desk · Empirial Hotel Ops" },
-      {
-        name: "description",
-        content:
-          "Empirial Hotel front-desk dashboard: occupancy, room board, live POS checks and today's arrivals.",
-      },
-      { property: "og:title", content: "Front Desk · Empirial Hotel Ops" },
-      {
-        property: "og:description",
-        content: "Occupancy, room status, POS checks and arrivals for Empirial Hotel.",
-      },
-    ],
-  }),
-  component: Desk,
+  head: () => ({ meta: [{ title: "Overview · Empirial POS" }, { name: "description", content: "Daily operations, revenue, and activity across the Empirial POS platform." }, { property: "og:title", content: "Overview · Empirial POS" }, { property: "og:description", content: "Daily operations, revenue, and activity across the Empirial POS platform." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }), component: Overview,
 });
 
-function Desk() {
-  const board = rooms.filter((r) => r.floor === 2);
-  const arrivals = bookings.filter((b) => b.status === "Confirmed" || b.status === "Pending");
-
-  return (
-    <AppShell>
-      <div className="grid grid-cols-2 gap-2 lg:grid-cols-4">
-        <Stat
-          label="Occupancy"
-          value={
-            <>
-              {kpis.occupancyPct}
-              <span className="text-sm text-muted-foreground">%</span>
-            </>
-          }
-          sub={`${kpis.occupied} / ${kpis.totalRooms} rooms`}
-        />
-        <Stat label="ADR" value={rand(kpis.adr)} sub={kpis.adrDelta} subTone="positive" />
-        <Stat
-          label="Today's Revenue"
-          value={rand(kpis.revenueToday)}
-          sub={`incl. F&B ${rand(kpis.fnbToday)}`}
-        />
-        <Stat label="Arrivals" value={kpis.arrivals} sub={`${kpis.checkedIn} checked in`} />
-      </div>
-
-      <Panel
-        title="Room Board"
-        action={
-          <div className="flex gap-2 text-[10px]">
-            {(["clean", "dirty", "occupied"] as const).map((s) => (
-              <span key={s} className="flex items-center gap-1">
-                <i className={`inline-block size-2 rounded-full ${statusDot[s]}`} />
-                {statusLabel[s]}
-              </span>
-            ))}
-          </div>
-        }
-      >
-        <div className="grid grid-cols-4 gap-1.5 sm:grid-cols-6 lg:grid-cols-8">
-          {board.map((room) => (
-            <Link
-              key={room.number}
-              to="/rooms"
-              className={`rounded-lg py-2 text-center transition-transform active:scale-95 ${statusClasses[room.status]}`}
-            >
-              <div className="font-mono text-xs font-medium text-ink">{room.number}</div>
-              <div className="text-[9px]">{statusLabel[room.status]}</div>
-            </Link>
-          ))}
-        </div>
-      </Panel>
-
-      <Panel
-        title="POS · Bar & Kitchen"
-        action={
-          <Link to="/pos" className="text-[11px] font-medium text-accent-foreground">
-            Open register
-          </Link>
-        }
-      >
-        <div className="rounded-xl bg-ink p-3 text-paper">
-          <div className="mb-2 text-[10px] uppercase tracking-[0.16em] text-paper/50">
-            Live Check · Rm 209
-          </div>
-          <div className="space-y-1.5 text-[12px]">
-            <div className="flex justify-between">
-              <span>2 × Amarula</span>
-              <span className="font-mono tnum">R130</span>
-            </div>
-            <div className="flex justify-between">
-              <span>1 × Fresh Juice</span>
-              <span className="font-mono tnum">R45</span>
-            </div>
-            <div className="flex justify-between">
-              <span>1 × Nespresso</span>
-              <span className="font-mono tnum">R38</span>
-            </div>
-          </div>
-          <div className="my-2.5 h-px bg-paper/15" />
-          <div className="flex items-end justify-between">
-            <span className="text-[11px] text-paper/60">Total</span>
-            <span className="font-mono text-xl font-semibold tnum">R213</span>
-          </div>
-          <div className="mt-3 flex gap-2">
-            <Link
-              to="/pos"
-              className="flex-1 rounded-lg bg-brass py-2.5 text-center text-[12px] font-semibold text-brass-foreground"
-            >
-              Charge to Room
-            </Link>
-            <Link
-              to="/pos"
-              className="rounded-lg bg-paper/10 px-3 py-2.5 text-center text-[12px] font-medium"
-            >
-              Card
-            </Link>
-          </div>
-        </div>
-      </Panel>
-
-      <Panel
-        title="Upcoming Arrivals"
-        action={
-          <Link to="/bookings" className="text-[11px] font-medium text-accent-foreground">
-            All bookings
-          </Link>
-        }
-      >
-        <div className="divide-y divide-line">
-          {arrivals.map((b) => (
-            <div key={b.ref} className="flex items-center gap-3 py-2">
-              <div className="grid size-9 place-items-center rounded-full bg-secondary font-mono text-[11px] font-medium">
-                {b.initials}
-              </div>
-              <div className="flex-1 leading-tight">
-                <div className="text-[12px] font-medium">{b.guest}</div>
-                <div className="text-[10px] text-muted-foreground">
-                  {b.roomType} · {b.arrival} {b.time}
-                </div>
-              </div>
-              <span className="font-mono text-[10px] tnum text-muted-foreground">
-                {rand(b.total)}
-              </span>
-            </div>
-          ))}
-        </div>
-      </Panel>
-    </AppShell>
-  );
+function Overview() {
+  const { niche } = useProduct(); const config = nicheConfigs[niche]; const firstModule = config.modules[0];
+  return <AppShell title="Overview"><PageIntro title={`Good evening, ${config.business}`} description="The live shape of today's operations, sales, and attention points." action={<Button asChild>{firstModule ? <Link to={`/${firstModule.key}` as "/rooms"}>Open {firstModule.label}<ArrowUpRight /></Link> : <Link to="/pos">Open register<ArrowUpRight /></Link>}</Button>} />
+    <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">{config.kpis.map((kpi) => <Stat key={kpi.label} {...kpi} />)}</div>
+    <div className="grid gap-4 xl:grid-cols-[1.45fr_1fr]">
+      <Panel title="Revenue · last 7 days" action={<span className="font-display text-sm font-semibold tnum">R284 620</span>}><div className="flex h-44 items-end gap-2">{weekSeries.map((value, index) => <div key={index} className="flex h-full flex-1 flex-col justify-end gap-2"><div className="relative overflow-hidden rounded-t-xl border border-border bg-secondary" style={{ height: `${value}%` }}><div className="absolute inset-x-0 bottom-0 bg-primary" style={{ height: `${Math.round(value * 0.72)}%` }} /></div><span className="text-center text-[10px] text-muted-foreground">{["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"][index]}</span></div>)}</div><div className="mt-4 flex gap-5 text-[10px] uppercase tracking-[0.1em] text-muted-foreground"><span><i className="mr-2 inline-block size-2 rounded-full bg-primary" />{config.revenueLabels[0]}</span><span><i className="mr-2 inline-block size-2 rounded-full bg-muted-foreground" />{config.revenueLabels[1]}</span></div></Panel>
+      <Panel title="Live activity"><div className="divide-y divide-border">{config.activity.map((item) => <div key={item.title} className="flex items-center gap-3 py-3"><span className="grid size-9 place-items-center rounded-xl border border-border bg-secondary text-[10px] font-semibold">{item.title.slice(0, 2).toUpperCase()}</span><span className="min-w-0 flex-1"><span className="block truncate text-sm font-medium">{item.title}</span><span className="block truncate text-xs text-muted-foreground">{item.detail}</span></span><span className="text-[10px] text-muted-foreground tnum">{item.time}</span></div>)}</div></Panel>
+    </div>
+    <Panel title={`${config.shortLabel} workspace`}><div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">{config.modules.map((module) => <Link key={module.key} to={`/${module.key}` as "/rooms"} className="flex items-center justify-between rounded-2xl border border-border bg-secondary p-4 transition-colors hover:bg-accent"><span><span className="block text-sm font-medium">{module.label}</span><span className="mt-1 block text-xs text-muted-foreground">Open today's workspace</span></span><ChevronRight className="size-4" /></Link>)}</div></Panel>
+  </AppShell>;
 }

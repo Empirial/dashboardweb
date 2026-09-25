@@ -16,6 +16,8 @@ export const Route = createFileRoute("/bookings")({
         property: "og:description",
         content: "Track Empirial Hotel reservations by status, channel and arrival time.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Bookings,

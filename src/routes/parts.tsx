@@ -1,0 +1,2 @@
+import { createFileRoute } from "@tanstack/react-router"; import { ModulePage } from "@/components/ModulePage";
+export const Route = createFileRoute("/parts")({ head: () => ({ meta: [{ title: "Parts · Empirial POS" }, { name: "description", content: "Workshop parts stock and suppliers." }, { property: "og:title", content: "Parts · Empirial POS" }, { property: "og:description", content: "Workshop parts stock and suppliers." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }), component: () => <ModulePage moduleKey="parts" /> });
