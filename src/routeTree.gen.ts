@@ -15,6 +15,7 @@ import { Route as BillingRouteImport } from './routes/billing'
 import { Route as BookingsRouteImport } from './routes/bookings'
 import { Route as CatalogRouteImport } from './routes/catalog'
 import { Route as CrewRouteImport } from './routes/crew'
+import { Route as CustomersRouteImport } from './routes/customers'
 import { Route as FloorPlanRouteImport } from './routes/floor-plan'
 import { Route as GuestsRouteImport } from './routes/guests'
 import { Route as InventoryRouteImport } from './routes/inventory'
@@ -27,6 +28,7 @@ import { Route as QuotesRouteImport } from './routes/quotes'
 import { Route as ReportsRouteImport } from './routes/reports'
 import { Route as RoomsRouteImport } from './routes/rooms'
 import { Route as SchedulingRouteImport } from './routes/scheduling'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as StaffRouteImport } from './routes/staff'
 
 const IndexRoute = IndexRouteImport.update({
@@ -57,6 +59,11 @@ const CatalogRoute = CatalogRouteImport.update({
 const CrewRoute = CrewRouteImport.update({
   id: '/crew',
   path: '/crew',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CustomersRoute = CustomersRouteImport.update({
+  id: '/customers',
+  path: '/customers',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FloorPlanRoute = FloorPlanRouteImport.update({
@@ -119,6 +126,11 @@ const SchedulingRoute = SchedulingRouteImport.update({
   path: '/scheduling',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StaffRoute = StaffRouteImport.update({
   id: '/staff',
   path: '/staff',
@@ -132,6 +144,7 @@ export interface FileRoutesByFullPath {
   '/bookings': typeof BookingsRoute
   '/catalog': typeof CatalogRoute
   '/crew': typeof CrewRoute
+  '/customers': typeof CustomersRoute
   '/floor-plan': typeof FloorPlanRoute
   '/guests': typeof GuestsRoute
   '/inventory': typeof InventoryRoute
@@ -144,6 +157,7 @@ export interface FileRoutesByFullPath {
   '/reports': typeof ReportsRoute
   '/rooms': typeof RoomsRoute
   '/scheduling': typeof SchedulingRoute
+  '/settings': typeof SettingsRoute
   '/staff': typeof StaffRoute
 }
 export interface FileRoutesByTo {
@@ -153,6 +167,7 @@ export interface FileRoutesByTo {
   '/bookings': typeof BookingsRoute
   '/catalog': typeof CatalogRoute
   '/crew': typeof CrewRoute
+  '/customers': typeof CustomersRoute
   '/floor-plan': typeof FloorPlanRoute
   '/guests': typeof GuestsRoute
   '/inventory': typeof InventoryRoute
@@ -165,6 +180,7 @@ export interface FileRoutesByTo {
   '/reports': typeof ReportsRoute
   '/rooms': typeof RoomsRoute
   '/scheduling': typeof SchedulingRoute
+  '/settings': typeof SettingsRoute
   '/staff': typeof StaffRoute
 }
 export interface FileRoutesById {
@@ -175,6 +191,7 @@ export interface FileRoutesById {
   '/bookings': typeof BookingsRoute
   '/catalog': typeof CatalogRoute
   '/crew': typeof CrewRoute
+  '/customers': typeof CustomersRoute
   '/floor-plan': typeof FloorPlanRoute
   '/guests': typeof GuestsRoute
   '/inventory': typeof InventoryRoute
@@ -187,6 +204,7 @@ export interface FileRoutesById {
   '/reports': typeof ReportsRoute
   '/rooms': typeof RoomsRoute
   '/scheduling': typeof SchedulingRoute
+  '/settings': typeof SettingsRoute
   '/staff': typeof StaffRoute
 }
 export interface FileRouteTypes {
@@ -198,6 +216,7 @@ export interface FileRouteTypes {
     | '/bookings'
     | '/catalog'
     | '/crew'
+    | '/customers'
     | '/floor-plan'
     | '/guests'
     | '/inventory'
@@ -210,6 +229,7 @@ export interface FileRouteTypes {
     | '/reports'
     | '/rooms'
     | '/scheduling'
+    | '/settings'
     | '/staff'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -219,6 +239,7 @@ export interface FileRouteTypes {
     | '/bookings'
     | '/catalog'
     | '/crew'
+    | '/customers'
     | '/floor-plan'
     | '/guests'
     | '/inventory'
@@ -231,6 +252,7 @@ export interface FileRouteTypes {
     | '/reports'
     | '/rooms'
     | '/scheduling'
+    | '/settings'
     | '/staff'
   id:
     | '__root__'
@@ -240,6 +262,7 @@ export interface FileRouteTypes {
     | '/bookings'
     | '/catalog'
     | '/crew'
+    | '/customers'
     | '/floor-plan'
     | '/guests'
     | '/inventory'
@@ -252,6 +275,7 @@ export interface FileRouteTypes {
     | '/reports'
     | '/rooms'
     | '/scheduling'
+    | '/settings'
     | '/staff'
   fileRoutesById: FileRoutesById
 }
@@ -262,6 +286,7 @@ export interface RootRouteChildren {
   BookingsRoute: typeof BookingsRoute
   CatalogRoute: typeof CatalogRoute
   CrewRoute: typeof CrewRoute
+  CustomersRoute: typeof CustomersRoute
   FloorPlanRoute: typeof FloorPlanRoute
   GuestsRoute: typeof GuestsRoute
   InventoryRoute: typeof InventoryRoute
@@ -274,6 +299,7 @@ export interface RootRouteChildren {
   ReportsRoute: typeof ReportsRoute
   RoomsRoute: typeof RoomsRoute
   SchedulingRoute: typeof SchedulingRoute
+  SettingsRoute: typeof SettingsRoute
   StaffRoute: typeof StaffRoute
 }
 
@@ -319,6 +345,13 @@ declare module '@tanstack/react-router' {
       path: '/crew'
       fullPath: '/crew'
       preLoaderRoute: typeof CrewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/customers': {
+      id: '/customers'
+      path: '/customers'
+      fullPath: '/customers'
+      preLoaderRoute: typeof CustomersRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/floor-plan': {
@@ -405,6 +438,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SchedulingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/staff': {
       id: '/staff'
       path: '/staff'
@@ -422,6 +462,7 @@ const rootRouteChildren: RootRouteChildren = {
   BookingsRoute: BookingsRoute,
   CatalogRoute: CatalogRoute,
   CrewRoute: CrewRoute,
+  CustomersRoute: CustomersRoute,
   FloorPlanRoute: FloorPlanRoute,
   GuestsRoute: GuestsRoute,
   InventoryRoute: InventoryRoute,
@@ -434,6 +475,7 @@ const rootRouteChildren: RootRouteChildren = {
   ReportsRoute: ReportsRoute,
   RoomsRoute: RoomsRoute,
   SchedulingRoute: SchedulingRoute,
+  SettingsRoute: SettingsRoute,
   StaffRoute: StaffRoute,
 }
 export const routeTree = rootRouteImport
