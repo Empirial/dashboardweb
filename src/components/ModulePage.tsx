@@ -3,7 +3,7 @@ import { Check, ChevronRight, Plus, RotateCw } from "lucide-react";
 import { AppShell, PageIntro, Panel, Segmented, Stat } from "./AppShell";
 import { Button } from "./ui/button";
 import { Switch } from "./ui/switch";
-import { moduleRecords, type ModuleKey } from "@/lib/platform-data";
+import { moduleRecords, type ModuleKey, type ModuleRecord } from "@/lib/platform-data";
 import { useProduct } from "@/lib/product";
 import { nicheConfigs } from "@/lib/platform-data";
 
@@ -21,7 +21,7 @@ export function ModulePage({ moduleKey }: { moduleKey: ModuleKey }) {
   const config = nicheConfigs[niche];
   const initial = moduleRecords[moduleKey] ?? [];
   const [records, setRecords] = useState(initial);
-  const [selected, setSelected] = useState<Record<string, string | number | boolean> | null>(null);
+  const [selected, setSelected] = useState<ModuleRecord | null>(null);
   const [filter, setFilter] = useState("All");
   const [notice, setNotice] = useState("");
   const statuses = useMemo(() => ["All", ...new Set(records.map((record) => String(record.status)))], [records]);

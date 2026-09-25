@@ -70,7 +70,7 @@ export function Panel({ title, action, children, className = "" }: { title?: str
   return <section className={`panel rise ${className}`}>{(title || action) && <div className="flex min-h-14 items-center justify-between gap-3 border-b border-border px-4 py-3 sm:px-5">{title && <h3 className="font-display text-sm font-semibold">{title}</h3>}{action}</div>}<div className="p-4 sm:p-5">{children}</div></section>;
 }
 
-export function Stat({ label, value, sub }: { label: string; value: ReactNode; sub?: string }) {
+export function Stat({ label, value, sub, subTone: _subTone }: { label: string; value: ReactNode; sub?: string; subTone?: "muted" | "positive" }) {
   return <div className="panel-sm p-4 sm:p-5"><div className="text-[10px] uppercase tracking-[0.14em] text-muted-foreground">{label}</div><div className="mt-3 font-display text-2xl font-semibold tnum sm:text-[28px]">{value}</div>{sub && <div className="mt-1.5 text-[11px] text-muted-foreground">{sub}</div>}</div>;
 }
 

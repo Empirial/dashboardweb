@@ -34,6 +34,8 @@ export const Route = createFileRoute("/rooms")({
         property: "og:description",
         content: "Live housekeeping status, a 14-night availability calendar and instant room booking.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Rooms,

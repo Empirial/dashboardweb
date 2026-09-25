@@ -1,6 +1,7 @@
 import type { Niche } from "./product";
 
 export type ModuleKey = "rooms" | "bookings" | "floor-plan" | "kitchen" | "inventory" | "catalog" | "appointments" | "staff" | "packages" | "jobs" | "parts" | "quotes" | "scheduling" | "billing" | "crew";
+export type ModuleRecord = { name: string; detail: string; status: string; value: string | number; enabled?: boolean };
 
 export type NicheConfig = {
   label: string;
@@ -67,7 +68,7 @@ export const nicheConfigs: Record<Niche, NicheConfig> = {
 
 export const weekSeries = [68, 74, 71, 88, 94, 82, 91];
 
-export const moduleRecords: Partial<Record<ModuleKey, Array<Record<string, string | number | boolean>>>> = {
+export const moduleRecords: Partial<Record<ModuleKey, ModuleRecord[]>> = {
   "floor-plan": [{ name: "Table 1", detail: "2 covers", status: "Seated", value: "R420" }, { name: "Table 4", detail: "4 covers", status: "Ordered", value: "R1 280" }, { name: "Table 7", detail: "6 covers", status: "Awaiting payment", value: "R2 140" }, { name: "Table 9", detail: "Window · 2 covers", status: "Empty", value: "Open" }, { name: "Table 12", detail: "4 covers", status: "Ready", value: "R980" }, { name: "Terrace 2", detail: "2 covers", status: "Empty", value: "Open" }],
   kitchen: [{ name: "Ticket 48 · Table 12", detail: "Kingklip, short rib, 2 sides", status: "Ready", value: "12 min" }, { name: "Ticket 49 · Table 7", detail: "2 starters, 4 mains", status: "Cooking", value: "8 min" }, { name: "Ticket 50 · Table 4", detail: "Burrata, kingklip", status: "Queued", value: "3 min" }],
   inventory: [{ name: "Field Tote", detail: "SKU ACC-1001 · reorder 6", status: "Low stock", value: 3 }, { name: "Linen Shirt", detail: "SKU APP-2044 · 4 variants", status: "In stock", value: 24 }, { name: "Stone Carafe", detail: "SKU HOM-3012", status: "In stock", value: 18 }, { name: "Candle No. 04", detail: "SKU HOM-4430 · reorder 8", status: "Low stock", value: 5 }],
