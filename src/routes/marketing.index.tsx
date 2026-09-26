@@ -3,7 +3,7 @@ import { ArrowRight, LayoutDashboard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { verticals } from "@/lib/marketing-data";
 
-export const Route = createFileRoute("/marketing")({
+export const Route = createFileRoute("/marketing/")({
   head: () => ({ meta: [
     { title: "Empirial Designs · Five customer experiences" },
     { name: "description", content: "Explore customer-facing websites for Empirial Hotels, Property, Living, Salon and Auto." },
