@@ -1,215 +1,197 @@
+import hotelHero from "@/assets/empirial-hotel-hero.jpg";
+import hotelDetail from "@/assets/empirial-hotel-detail.jpg";
+import propertyHero from "@/assets/empirial-property-hero.jpg";
+import propertyDetail from "@/assets/empirial-property-detail.jpg";
+import retailHero from "@/assets/empirial-retail-hero.jpg";
+import retailDetail from "@/assets/empirial-retail-detail.jpg";
+import salonHero from "@/assets/empirial-salon-hero.jpg";
+import salonDetail from "@/assets/empirial-salon-detail.jpg";
+import autoHero from "@/assets/empirial-auto-hero.jpg";
+import autoDetail from "@/assets/empirial-auto-detail.jpg";
+
 export type VerticalKey = "hotel" | "property" | "retail" | "salon" | "auto";
+
+export type Offering = {
+  name: string;
+  detail: string;
+  price: string;
+  tag: string;
+};
 
 export type VerticalConfig = {
   key: VerticalKey;
   tab: string;
   brand: string;
-  represents: string;
-  accent: string;
-  accentSoft: string;
-  accentInk: string;
+  category: string;
+  hero: string;
+  detailImage: string;
+  eyebrow: string;
   headline: string;
-  headlineAccent: string;
   sub: string;
-  preview: {
-    label: string;
-    caption: string;
-    rows: Array<{ left: string; mid: string; right: string; tone?: "accent" | "muted" }>;
-  };
-  steps: [string, string, string];
-  features: Array<{ title: string; body: string }>;
-  pricingUnit: string;
-  tiers: Array<{ name: string; setup: string; monthly: string; includes: string[] }>;
-  proof: Array<{ name: string; detail: string }>;
+  primaryCta: string;
+  exploreLabel: string;
+  aboutTitle: string;
+  about: string;
+  promise: string;
+  highlights: [string, string, string];
+  offerings: Offering[];
+  formTitle: string;
+  formDescription: string;
+  formFields: Array<{ label: string; type: string; placeholder: string }>;
 };
 
 export const verticals: VerticalConfig[] = [
   {
     key: "hotel",
     tab: "Hotel",
-    brand: "Empirial Hotel",
-    represents: "Accommodation, guesthouses, hotels",
-    accent: "#0F5C56",
-    accentSoft: "#E4F0EE",
-    accentInk: "#0A403C",
-    headline: "Your booking book is a paper diary and the bar tab lives on a",
-    headlineAccent: "separate till.",
-    sub: "Empirial Hotel puts the room board, arrivals, bar and restaurant charges on one screen, so a guest's stay and spend never have to be added up by hand at checkout.",
-    preview: {
-      label: "Room board · next 5 nights",
-      caption: "Live availability, advance bookings, and room charges in one grid.",
-      rows: [
-        { left: "101 · Standard", mid: "T. Mokoena · 3 nights", right: "Checked in", tone: "accent" },
-        { left: "104 · Standard", mid: "Open", right: "Available", tone: "muted" },
-        { left: "209 · Deluxe", mid: "L. Khumalo · 2 nights", right: "Arrives 14:00" },
-        { left: "212 · Deluxe", mid: "Advance · 12 Oct", right: "Held" },
-        { left: "301 · Suite", mid: "Bar tab R860", right: "On room", tone: "accent" },
-      ],
-    },
-    steps: ["Take bar, restaurant and room-service payments at any till.", "Run the room board: arrivals, departures, housekeeping, advance bookings.", "Close the day with one report that ties rooms and F&B together."],
-    features: [
-      { title: "Room board calendar", body: "Fourteen nights at a glance, with booked stays, advance holds and free rooms per room type." },
-      { title: "Charge to room", body: "A drink at the bar lands on the guest folio, so checkout is one balance instead of three slips." },
-      { title: "Book from the till", body: "A walk-in can be given a room, dates and a rate from the register without leaving the sale." },
-      { title: "Arrivals and departures", body: "Today's check-ins, check-outs and housekeeping status on the overview screen." },
+    brand: "Empirial Hotels",
+    category: "Boutique lodge",
+    hero: hotelHero,
+    detailImage: hotelDetail,
+    eyebrow: "Stay close to what matters",
+    headline: "Your home from home, set against the wild.",
+    sub: "Slow mornings, generous rooms and warm South African hospitality. Come for a night, stay for the feeling.",
+    primaryCta: "Book your stay",
+    exploreLabel: "Explore rooms",
+    aboutTitle: "Made for unhurried stays",
+    about: "Empirial Hotels brings together restful interiors, thoughtful hosting and the quiet of the landscape. Every stay is personal, comfortable and easy from arrival to departure.",
+    promise: "A considered lodge experience with the warmth of home.",
+    highlights: ["Breakfast included", "Private terraces", "Flexible check-in"],
+    offerings: [
+      { name: "Garden Room", detail: "King bed · private terrace · breakfast", price: "From R1 850 / night", tag: "2 guests" },
+      { name: "Deluxe Bush Suite", detail: "Lounge · bush views · outdoor shower", price: "From R2 750 / night", tag: "2 guests" },
+      { name: "Family Villa", detail: "Two bedrooms · plunge pool · full breakfast", price: "From R4 600 / night", tag: "4 guests" },
     ],
-    pricingUnit: "per room",
-    tiers: [
-      { name: "Starter", setup: "R3 500 setup", monthly: "R650 / month", includes: ["Up to 10 rooms", "Register + room board", "Daily reports"] },
-      { name: "Smart", setup: "R6 500 setup", monthly: "R1 250 / month", includes: ["Up to 40 rooms", "Charge to room + F&B till", "Advance bookings"] },
-      { name: "Elite", setup: "R12 000 setup", monthly: "R2 400 / month", includes: ["Unlimited rooms", "Multiple tills and bars", "Staff roles and shift reports"] },
+    formTitle: "Plan your stay",
+    formDescription: "Choose your dates and we’ll confirm the best available room.",
+    formFields: [
+      { label: "Check in", type: "date", placeholder: "" },
+      { label: "Check out", type: "date", placeholder: "" },
+      { label: "Guests", type: "number", placeholder: "2" },
+      { label: "Your name", type: "text", placeholder: "Full name" },
     ],
-    proof: [],
   },
   {
     key: "property",
     tab: "Property",
     brand: "Empirial Property",
-    represents: "Cleaning & property services",
-    accent: "#9C3F1C",
-    accentSoft: "#F6E8E1",
-    accentInk: "#6F2C12",
-    headline: "You are chasing the same monthly invoices and guessing which crew took the",
-    headlineAccent: "morning job.",
-    sub: "Empirial Property keeps the schedule, the crews and the recurring billing run in one place, so nobody arrives at an unassigned job and no month-end invoice is forgotten.",
-    preview: {
-      label: "Today's schedule",
-      caption: "Jobs, assigned crews and billing status for the day.",
-      rows: [
-        { left: "08:00 · Rosebank Dental", mid: "Crew 3 · weekly", right: "Completed", tone: "accent" },
-        { left: "10:30 · Parkhurst home", mid: "Crew 1 · fortnightly", right: "In progress" },
-        { left: "13:00 · Oxford offices", mid: "Unassigned", right: "Needs crew", tone: "muted" },
-        { left: "15:00 · Deep clean", mid: "Crew 2 · once-off", right: "Scheduled" },
-        { left: "Billing run · 01 Oct", mid: "18 clients", right: "R18 420", tone: "accent" },
-      ],
-    },
-    steps: ["Take card or cash for once-off jobs on site.", "Assign crews to the day's schedule and mark jobs complete as they finish.", "Run the recurring billing batch and see who has paid."],
-    features: [
-      { title: "Job schedule", body: "The day laid out by time with the crew on each job and anything still unassigned flagged." },
-      { title: "Recurring billing", body: "Weekly, fortnightly and monthly clients batched into one run instead of chased one by one." },
-      { title: "Crew capacity", body: "Who is on today, how many jobs each crew carries, and where there is room for one more." },
-      { title: "Once-off charges", body: "Carpet treatments and extras added to a job and paid for on the spot." },
+    category: "Homes & property care",
+    hero: propertyHero,
+    detailImage: propertyDetail,
+    eyebrow: "Find your place",
+    headline: "A better way to find a home you love.",
+    sub: "Explore considered homes, arrange a private viewing and get practical help caring for your property.",
+    primaryCta: "Arrange a viewing",
+    exploreLabel: "View properties",
+    aboutTitle: "Property, handled personally",
+    about: "We connect people with inviting homes and dependable property care. Local knowledge, responsive service and clear communication shape every viewing and every visit.",
+    promise: "Beautiful homes, thoughtful service and people who pick up the phone.",
+    highlights: ["Private viewings", "Local specialists", "Property care"],
+    offerings: [
+      { name: "Parkview Courtyard Home", detail: "3 bedrooms · 2 bathrooms · garden", price: "R3 850 000", tag: "For sale" },
+      { name: "Rosebank City Apartment", detail: "2 bedrooms · balcony · secure parking", price: "R18 500 / month", tag: "To let" },
+      { name: "Complete Home Care", detail: "Scheduled cleaning · garden · maintenance", price: "From R1 450 / visit", tag: "Property care" },
     ],
-    pricingUnit: "per crew",
-    tiers: [
-      { name: "Starter", setup: "R2 500 setup", monthly: "R550 / month", includes: ["1 crew", "Schedule + register", "Once-off invoicing"] },
-      { name: "Smart", setup: "R5 500 setup", monthly: "R1 050 / month", includes: ["Up to 5 crews", "Recurring billing runs", "Client history"] },
-      { name: "Elite", setup: "R9 500 setup", monthly: "R1 950 / month", includes: ["Unlimited crews", "Commercial contracts", "Crew performance reports"] },
+    formTitle: "Arrange a private viewing",
+    formDescription: "Tell us what caught your eye and when you would like to visit.",
+    formFields: [
+      { label: "Property", type: "text", placeholder: "Property or service" },
+      { label: "Preferred date", type: "date", placeholder: "" },
+      { label: "Your name", type: "text", placeholder: "Full name" },
+      { label: "Phone", type: "tel", placeholder: "065 000 0000" },
     ],
-    proof: [{ name: "NNA Electrical & Plumbing", detail: "Field service client of Empirial Designs" }],
   },
   {
     key: "retail",
     tab: "Retail",
-    brand: "Empirial Retail",
-    represents: "Shops and retail stores",
-    accent: "#8A5A06",
-    accentSoft: "#F8EEDA",
-    accentInk: "#5F3D02",
-    headline: "You only find out a line has sold out when a customer asks for it at the",
-    headlineAccent: "counter.",
-    sub: "Empirial Retail counts stock as it sells, flags reorder levels before the shelf is empty, and scans barcodes straight into the sale.",
-    preview: {
-      label: "Stock on hand",
-      caption: "Counts move as items sell, with reorder levels flagged.",
-      rows: [
-        { left: "Field Tote", mid: "ACC-1001 · reorder at 6", right: "3 left", tone: "accent" },
-        { left: "Linen Shirt", mid: "APP-2044 · 4 variants", right: "24 left" },
-        { left: "Stone Carafe", mid: "HOM-3012", right: "18 left" },
-        { left: "Candle No. 04", mid: "HOM-4430 · reorder at 8", right: "5 left", tone: "accent" },
-        { left: "Studio Tee", mid: "APP-2088", right: "31 left", tone: "muted" },
-      ],
-    },
-    steps: ["Scan or tap items into the sale and take card or cash.", "Watch stock counts and reorder flags move as the day sells.", "Check what sold, what is short, and what to order."],
-    features: [
-      { title: "Barcode selling", body: "Scan straight into the till; the line, price and stock count all update together." },
-      { title: "Low stock flags", body: "Reorder levels per product so a fast line is flagged before it runs out." },
-      { title: "Product catalogue", body: "Prices, categories and variants in one list you can change without calling anyone." },
-      { title: "Daily sales report", body: "Units sold, takings by category, and the day's top products." },
+    brand: "Empirial Living",
+    category: "Home & lifestyle shop",
+    hero: retailHero,
+    detailImage: retailDetail,
+    eyebrow: "The considered collection",
+    headline: "Everyday pieces, chosen to live beautifully.",
+    sub: "Natural textures, useful objects and effortless clothing from makers we admire. Made to be used, kept and loved.",
+    primaryCta: "Shop the collection",
+    exploreLabel: "Browse new arrivals",
+    aboutTitle: "Fewer, better things",
+    about: "Empirial Living is a thoughtful edit of homeware, clothing and gifts. We choose honest materials, useful forms and pieces that become better with time.",
+    promise: "A slower, more considered way to shop.",
+    highlights: ["Local makers", "Natural materials", "Nationwide delivery"],
+    offerings: [
+      { name: "Stone Carafe", detail: "Hand-finished ceramic · 1.2 litre", price: "R680", tag: "Home" },
+      { name: "Field Linen Shirt", detail: "Washed linen · olive · relaxed fit", price: "R1 250", tag: "Wear" },
+      { name: "Woven Market Tote", detail: "Natural fibre · reinforced handles", price: "R890", tag: "Carry" },
     ],
-    pricingUnit: "per till",
-    tiers: [
-      { name: "Starter", setup: "R2 500 setup", monthly: "R550 / month", includes: ["1 till", "Up to 300 products", "Daily sales report"] },
-      { name: "Smart", setup: "R5 000 setup", monthly: "R1 050 / month", includes: ["2 tills", "Barcode scanning", "Stock and reorder levels"] },
-      { name: "Elite", setup: "R9 000 setup", monthly: "R1 850 / month", includes: ["Unlimited tills", "Variants and suppliers", "Staff roles and shift cash-up"] },
+    formTitle: "Your shopping bag",
+    formDescription: "Your selected piece is ready. Complete this mock order to see the full journey.",
+    formFields: [
+      { label: "Your name", type: "text", placeholder: "Full name" },
+      { label: "Email", type: "email", placeholder: "you@example.com" },
+      { label: "Delivery city", type: "text", placeholder: "Johannesburg" },
+      { label: "Quantity", type: "number", placeholder: "1" },
     ],
-    proof: [],
   },
   {
     key: "salon",
     tab: "Salon",
     brand: "Empirial Salon",
-    represents: "Beauty & grooming",
-    accent: "#9B2F58",
-    accentSoft: "#F7E5EC",
-    accentInk: "#6D1E3C",
-    headline: "The appointment book is a notebook, the reminders are on WhatsApp, and the 10:30 just",
-    headlineAccent: "did not arrive.",
-    sub: "Empirial Salon keeps every chair's day in one book, shows the open slots you can still fill, and records no-shows instead of losing them.",
-    preview: {
-      label: "Today · by chair",
-      caption: "Every stylist's day, with open slots you can still sell.",
-      rows: [
-        { left: "09:00 · Zanele Khoza", mid: "Cut & finish · Mia", right: "Completed", tone: "accent" },
-        { left: "10:30 · Nadia Peters", mid: "Signature facial · Lwazi", right: "In service" },
-        { left: "13:00 · Open slot", mid: "Mia · 60 minutes", right: "Fill it", tone: "muted" },
-        { left: "14:30 · Amara Scott", mid: "Gel manicure · Priya", right: "Confirmed" },
-        { left: "16:00 · Glow Day", mid: "Package · 3 services", right: "R1 450", tone: "accent" },
-      ],
-    },
-    steps: ["Take payment for services, packages and retail at the front desk.", "Run the appointment book chair by chair and fill open slots.", "See chair use, no-shows and service takings for the week."],
-    features: [
-      { title: "Appointment book", body: "The day per stylist with confirmed, in-service, completed and open slots clearly marked." },
-      { title: "Packages", body: "Bundle services into one sellable package that drops straight onto the till." },
-      { title: "Chair and staff view", body: "Who is on today, their hours, and how full each chair is." },
-      { title: "No-show record", body: "No-shows counted instead of forgotten, so repeat offenders are visible." },
+    category: "Hair & beauty studio",
+    hero: salonHero,
+    detailImage: salonDetail,
+    eyebrow: "Made for your best hair days",
+    headline: "Beautiful hair, shaped around you.",
+    sub: "Protective styles, natural hair care and restorative treatments delivered with time, skill and a genuinely personal touch.",
+    primaryCta: "Book an appointment",
+    exploreLabel: "Explore the menu",
+    aboutTitle: "Care is part of the service",
+    about: "Our stylists begin by listening. From everyday maintenance to a complete new look, we protect the health of your hair while creating a finish that feels like you.",
+    promise: "Expert hands, considered products and time reserved just for you.",
+    highlights: ["Natural hair specialists", "Protective styling", "Personal consultations"],
+    offerings: [
+      { name: "Knotless Braids", detail: "Consultation · wash · finish", price: "From R1 200", tag: "3–5 hours" },
+      { name: "Silk Press", detail: "Wash · treatment · heat-protected finish", price: "From R650", tag: "90 minutes" },
+      { name: "Curl Ritual", detail: "Hydration · shaping · definition", price: "From R780", tag: "2 hours" },
     ],
-    pricingUnit: "per chair",
-    tiers: [
-      { name: "Starter", setup: "R2 500 setup", monthly: "R500 / month", includes: ["Up to 2 chairs", "Appointment book", "Card and cash"] },
-      { name: "Smart", setup: "R4 500 setup", monthly: "R950 / month", includes: ["Up to 6 chairs", "Packages and retail", "Client history"] },
-      { name: "Elite", setup: "R8 500 setup", monthly: "R1 750 / month", includes: ["Unlimited chairs", "Staff commission reports", "Multi-branch"] },
+    formTitle: "Reserve your chair",
+    formDescription: "Choose a service and preferred day. We’ll confirm the closest available time.",
+    formFields: [
+      { label: "Service", type: "text", placeholder: "e.g. Knotless braids" },
+      { label: "Preferred date", type: "date", placeholder: "" },
+      { label: "Your name", type: "text", placeholder: "Full name" },
+      { label: "Phone", type: "tel", placeholder: "065 000 0000" },
     ],
-    proof: [{ name: "R&M Beauty Salon", detail: "Salon client of Empirial Designs" }],
   },
   {
     key: "auto",
     tab: "Auto",
     brand: "Empirial Auto",
-    represents: "Automotive repair shops",
-    accent: "#1E4B80",
-    accentSoft: "#E4EBF4",
-    accentInk: "#143459",
-    headline: "Job cards live on paper and only one person knows which parts are on",
-    headlineAccent: "order.",
-    sub: "Empirial Auto tracks every job card from intake to collection, ties parts and labour to the vehicle, and turns an accepted quote into the invoice.",
-    preview: {
-      label: "Job cards · workshop",
-      caption: "Each vehicle's stage, parts and running total.",
-      rows: [
-        { left: "EMP-J104 · VW Polo", mid: "G. Adams · brake service", right: "Ready", tone: "accent" },
-        { left: "EMP-J105 · Fortuner", mid: "P. Molefe · major service", right: "In progress" },
-        { left: "EMP-J106 · BMW X3", mid: "M. Botha · diagnosis", right: "Awaiting parts", tone: "muted" },
-        { left: "Brake pad set", mid: "BP-442 · AutoParts SA", right: "4 in stock" },
-        { left: "Quote EMP-Q88", mid: "Clutch replacement", right: "R14 200", tone: "accent" },
-      ],
-    },
-    steps: ["Take deposits and final payments at the counter.", "Move job cards through intake, work, parts and ready for collection.", "See labour versus parts billed and what is still outstanding."],
-    features: [
-      { title: "Job cards", body: "Vehicle, customer, complaint and stage in one card the whole workshop can read." },
-      { title: "Parts tracking", body: "Parts on hand, on order and attached to a specific job instead of a memory." },
-      { title: "Quotes to invoice", body: "An approved estimate becomes the counter invoice without retyping the lines." },
-      { title: "Labour and parts split", body: "Reports that show what the workshop earned on hours versus what came from parts." },
+    category: "Vehicle care & repair",
+    hero: autoHero,
+    detailImage: autoDetail,
+    eyebrow: "Confidence in every kilometre",
+    headline: "Car care that keeps you moving.",
+    sub: "Straight answers, careful workmanship and dependable repairs for the car that carries your life.",
+    primaryCta: "Book a service",
+    exploreLabel: "See our services",
+    aboutTitle: "Good work, clearly explained",
+    about: "Empirial Auto combines experienced technicians with careful diagnostics. We explain what your car needs, agree the work with you and keep you informed until the keys are back in your hand.",
+    promise: "Professional workshop care without the guesswork.",
+    highlights: ["Clear estimates", "Experienced technicians", "Quality parts"],
+    offerings: [
+      { name: "Essential Service", detail: "Oil · filters · safety inspection", price: "From R1 950", tag: "Routine care" },
+      { name: "Brake Inspection", detail: "Pads · discs · fluid · road test", price: "From R650", tag: "Safety" },
+      { name: "Engine Diagnostics", detail: "Electronic scan · technician assessment", price: "From R850", tag: "Diagnostics" },
     ],
-    pricingUnit: "per bay",
-    tiers: [
-      { name: "Starter", setup: "R3 000 setup", monthly: "R600 / month", includes: ["Up to 3 bays", "Job cards", "Card and cash"] },
-      { name: "Smart", setup: "R6 000 setup", monthly: "R1 150 / month", includes: ["Up to 8 bays", "Parts and suppliers", "Quotes to invoice"] },
-      { name: "Elite", setup: "R11 000 setup", monthly: "R2 100 / month", includes: ["Unlimited bays", "Technician hours", "Labour vs parts reporting"] },
+    formTitle: "Book your car in",
+    formDescription: "Tell us about your car and we’ll confirm a workshop time.",
+    formFields: [
+      { label: "Vehicle", type: "text", placeholder: "e.g. 2021 VW Polo" },
+      { label: "Service needed", type: "text", placeholder: "Service or concern" },
+      { label: "Preferred date", type: "date", placeholder: "" },
+      { label: "Phone", type: "tel", placeholder: "065 000 0000" },
     ],
-    proof: [],
   },
 ];
 
-export const verticalByKey = (key: string | null): VerticalConfig =>
-  verticals.find((vertical) => vertical.key === key) ?? verticals[0]!;
+export const verticalByKey = (key: string | undefined): VerticalConfig =>
+  verticals.find((vertical) => vertical.key === key) ?? verticals[0] as VerticalConfig;

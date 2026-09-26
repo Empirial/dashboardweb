@@ -8,5 +8,7 @@
 - [x] Validate desktop, mobile, route metadata, and key interactions
 
 ## Marketing website
-- [x] Public Empirial Designs page with five business types, switcher, demo request form
+- [x] Public Empirial Designs portfolio with five image-led customer websites
+- [x] Hotel booking, Property viewing, Retail cart, Salon appointment, and Auto service prototype journeys
+- [x] Dedicated home, about, and offering routes for every business
 - [ ] Replace placeholder pricing figures with real ones
