@@ -31,6 +31,9 @@ import { Route as RoomsRouteImport } from './routes/rooms'
 import { Route as SchedulingRouteImport } from './routes/scheduling'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as StaffRouteImport } from './routes/staff'
+import { Route as MarketingVerticalRouteImport } from './routes/marketing.$vertical'
+import { Route as MarketingVerticalAboutRouteImport } from './routes/marketing.$vertical.about'
+import { Route as MarketingVerticalExploreRouteImport } from './routes/marketing.$vertical.explore'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -142,6 +145,22 @@ const StaffRoute = StaffRouteImport.update({
   path: '/staff',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MarketingVerticalRoute = MarketingVerticalRouteImport.update({
+  id: '/$vertical',
+  path: '/$vertical',
+  getParentRoute: () => MarketingRoute,
+} as any)
+const MarketingVerticalAboutRoute = MarketingVerticalAboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => MarketingVerticalRoute,
+} as any)
+const MarketingVerticalExploreRoute =
+  MarketingVerticalExploreRouteImport.update({
+    id: '/explore',
+    path: '/explore',
+    getParentRoute: () => MarketingVerticalRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -156,7 +175,7 @@ export interface FileRoutesByFullPath {
   '/inventory': typeof InventoryRoute
   '/jobs': typeof JobsRoute
   '/kitchen': typeof KitchenRoute
-  '/marketing': typeof MarketingRoute
+  '/marketing': typeof MarketingRouteWithChildren
   '/packages': typeof PackagesRoute
   '/parts': typeof PartsRoute
   '/pos': typeof PosRoute
@@ -166,6 +185,9 @@ export interface FileRoutesByFullPath {
   '/scheduling': typeof SchedulingRoute
   '/settings': typeof SettingsRoute
   '/staff': typeof StaffRoute
+  '/marketing/$vertical': typeof MarketingVerticalRouteWithChildren
+  '/marketing/$vertical/about': typeof MarketingVerticalAboutRoute
+  '/marketing/$vertical/explore': typeof MarketingVerticalExploreRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -180,7 +202,7 @@ export interface FileRoutesByTo {
   '/inventory': typeof InventoryRoute
   '/jobs': typeof JobsRoute
   '/kitchen': typeof KitchenRoute
-  '/marketing': typeof MarketingRoute
+  '/marketing': typeof MarketingRouteWithChildren
   '/packages': typeof PackagesRoute
   '/parts': typeof PartsRoute
   '/pos': typeof PosRoute
@@ -190,6 +212,9 @@ export interface FileRoutesByTo {
   '/scheduling': typeof SchedulingRoute
   '/settings': typeof SettingsRoute
   '/staff': typeof StaffRoute
+  '/marketing/$vertical': typeof MarketingVerticalRouteWithChildren
+  '/marketing/$vertical/about': typeof MarketingVerticalAboutRoute
+  '/marketing/$vertical/explore': typeof MarketingVerticalExploreRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -205,7 +230,7 @@ export interface FileRoutesById {
   '/inventory': typeof InventoryRoute
   '/jobs': typeof JobsRoute
   '/kitchen': typeof KitchenRoute
-  '/marketing': typeof MarketingRoute
+  '/marketing': typeof MarketingRouteWithChildren
   '/packages': typeof PackagesRoute
   '/parts': typeof PartsRoute
   '/pos': typeof PosRoute
@@ -215,6 +240,9 @@ export interface FileRoutesById {
   '/scheduling': typeof SchedulingRoute
   '/settings': typeof SettingsRoute
   '/staff': typeof StaffRoute
+  '/marketing/$vertical': typeof MarketingVerticalRouteWithChildren
+  '/marketing/$vertical/about': typeof MarketingVerticalAboutRoute
+  '/marketing/$vertical/explore': typeof MarketingVerticalExploreRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -241,6 +269,9 @@ export interface FileRouteTypes {
     | '/scheduling'
     | '/settings'
     | '/staff'
+    | '/marketing/$vertical'
+    | '/marketing/$vertical/about'
+    | '/marketing/$vertical/explore'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -265,6 +296,9 @@ export interface FileRouteTypes {
     | '/scheduling'
     | '/settings'
     | '/staff'
+    | '/marketing/$vertical'
+    | '/marketing/$vertical/about'
+    | '/marketing/$vertical/explore'
   id:
     | '__root__'
     | '/'
@@ -289,6 +323,9 @@ export interface FileRouteTypes {
     | '/scheduling'
     | '/settings'
     | '/staff'
+    | '/marketing/$vertical'
+    | '/marketing/$vertical/about'
+    | '/marketing/$vertical/explore'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -304,7 +341,7 @@ export interface RootRouteChildren {
   InventoryRoute: typeof InventoryRoute
   JobsRoute: typeof JobsRoute
   KitchenRoute: typeof KitchenRoute
-  MarketingRoute: typeof MarketingRoute
+  MarketingRoute: typeof MarketingRouteWithChildren
   PackagesRoute: typeof PackagesRoute
   PartsRoute: typeof PartsRoute
   PosRoute: typeof PosRoute
@@ -472,8 +509,54 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StaffRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/marketing/$vertical': {
+      id: '/marketing/$vertical'
+      path: '/$vertical'
+      fullPath: '/marketing/$vertical'
+      preLoaderRoute: typeof MarketingVerticalRouteImport
+      parentRoute: typeof MarketingRoute
+    }
+    '/marketing/$vertical/about': {
+      id: '/marketing/$vertical/about'
+      path: '/about'
+      fullPath: '/marketing/$vertical/about'
+      preLoaderRoute: typeof MarketingVerticalAboutRouteImport
+      parentRoute: typeof MarketingVerticalRoute
+    }
+    '/marketing/$vertical/explore': {
+      id: '/marketing/$vertical/explore'
+      path: '/explore'
+      fullPath: '/marketing/$vertical/explore'
+      preLoaderRoute: typeof MarketingVerticalExploreRouteImport
+      parentRoute: typeof MarketingVerticalRoute
+    }
   }
 }
+
+interface MarketingVerticalRouteChildren {
+  MarketingVerticalAboutRoute: typeof MarketingVerticalAboutRoute
+  MarketingVerticalExploreRoute: typeof MarketingVerticalExploreRoute
+}
+
+const MarketingVerticalRouteChildren: MarketingVerticalRouteChildren = {
+  MarketingVerticalAboutRoute: MarketingVerticalAboutRoute,
+  MarketingVerticalExploreRoute: MarketingVerticalExploreRoute,
+}
+
+const MarketingVerticalRouteWithChildren =
+  MarketingVerticalRoute._addFileChildren(MarketingVerticalRouteChildren)
+
+interface MarketingRouteChildren {
+  MarketingVerticalRoute: typeof MarketingVerticalRouteWithChildren
+}
+
+const MarketingRouteChildren: MarketingRouteChildren = {
+  MarketingVerticalRoute: MarketingVerticalRouteWithChildren,
+}
+
+const MarketingRouteWithChildren = MarketingRoute._addFileChildren(
+  MarketingRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -488,7 +571,7 @@ const rootRouteChildren: RootRouteChildren = {
   InventoryRoute: InventoryRoute,
   JobsRoute: JobsRoute,
   KitchenRoute: KitchenRoute,
-  MarketingRoute: MarketingRoute,
+  MarketingRoute: MarketingRouteWithChildren,
   PackagesRoute: PackagesRoute,
   PartsRoute: PartsRoute,
   PosRoute: PosRoute,
