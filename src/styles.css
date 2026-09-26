@@ -184,3 +184,12 @@
 @utility bell {
   animation: none;
 }
+
+/* Marketing site typography: distinctive display face on a plain body face */
+.market h1,
+.market h2,
+.market h3,
+.market .font-display {
+  font-family: "Fraunces", "Space Grotesk", Georgia, serif;
+  letter-spacing: -0.015em;
+}

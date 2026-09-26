@@ -50,7 +50,7 @@ export function AppShell({ children, title, eyebrow }: { children: ReactNode; ti
       <div className={`min-w-0 transition-[padding] duration-300 ${collapsed ? "md:pl-19" : "md:pl-63"}`}>
         <header className="sticky top-0 z-30 mx-2 mt-2 flex h-16 items-center justify-between panel px-4 md:top-3 md:mx-0 md:mt-0 md:px-6">
           <div><div className="text-[10px] uppercase tracking-[0.14em] text-muted-foreground">{eyebrow ?? config.shortLabel}</div><h1 className="font-display text-base font-semibold">{title ?? config.business}</h1></div>
-          <div className="flex items-center gap-3"><span className="hidden text-xs text-muted-foreground sm:inline">26 Sep 2026</span><span className="grid size-9 place-items-center rounded-full border border-border bg-secondary text-[11px] font-semibold">RM</span></div>
+          <div className="flex items-center gap-3"><Link to="/marketing" className="hidden rounded-xl border border-border bg-secondary px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:text-foreground sm:inline-block">Marketing site</Link><span className="hidden text-xs text-muted-foreground sm:inline">26 Sep 2026</span><span className="grid size-9 place-items-center rounded-full border border-border bg-secondary text-[11px] font-semibold">RM</span></div>
         </header>
         <main className="space-y-4 px-3 pb-28 pt-4 md:px-0 md:pb-8">{children}</main>
       </div>

@@ -21,6 +21,7 @@ import { Route as GuestsRouteImport } from './routes/guests'
 import { Route as InventoryRouteImport } from './routes/inventory'
 import { Route as JobsRouteImport } from './routes/jobs'
 import { Route as KitchenRouteImport } from './routes/kitchen'
+import { Route as MarketingRouteImport } from './routes/marketing'
 import { Route as PackagesRouteImport } from './routes/packages'
 import { Route as PartsRouteImport } from './routes/parts'
 import { Route as PosRouteImport } from './routes/pos'
@@ -91,6 +92,11 @@ const KitchenRoute = KitchenRouteImport.update({
   path: '/kitchen',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MarketingRoute = MarketingRouteImport.update({
+  id: '/marketing',
+  path: '/marketing',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PackagesRoute = PackagesRouteImport.update({
   id: '/packages',
   path: '/packages',
@@ -150,6 +156,7 @@ export interface FileRoutesByFullPath {
   '/inventory': typeof InventoryRoute
   '/jobs': typeof JobsRoute
   '/kitchen': typeof KitchenRoute
+  '/marketing': typeof MarketingRoute
   '/packages': typeof PackagesRoute
   '/parts': typeof PartsRoute
   '/pos': typeof PosRoute
@@ -173,6 +180,7 @@ export interface FileRoutesByTo {
   '/inventory': typeof InventoryRoute
   '/jobs': typeof JobsRoute
   '/kitchen': typeof KitchenRoute
+  '/marketing': typeof MarketingRoute
   '/packages': typeof PackagesRoute
   '/parts': typeof PartsRoute
   '/pos': typeof PosRoute
@@ -197,6 +205,7 @@ export interface FileRoutesById {
   '/inventory': typeof InventoryRoute
   '/jobs': typeof JobsRoute
   '/kitchen': typeof KitchenRoute
+  '/marketing': typeof MarketingRoute
   '/packages': typeof PackagesRoute
   '/parts': typeof PartsRoute
   '/pos': typeof PosRoute
@@ -222,6 +231,7 @@ export interface FileRouteTypes {
     | '/inventory'
     | '/jobs'
     | '/kitchen'
+    | '/marketing'
     | '/packages'
     | '/parts'
     | '/pos'
@@ -245,6 +255,7 @@ export interface FileRouteTypes {
     | '/inventory'
     | '/jobs'
     | '/kitchen'
+    | '/marketing'
     | '/packages'
     | '/parts'
     | '/pos'
@@ -268,6 +279,7 @@ export interface FileRouteTypes {
     | '/inventory'
     | '/jobs'
     | '/kitchen'
+    | '/marketing'
     | '/packages'
     | '/parts'
     | '/pos'
@@ -292,6 +304,7 @@ export interface RootRouteChildren {
   InventoryRoute: typeof InventoryRoute
   JobsRoute: typeof JobsRoute
   KitchenRoute: typeof KitchenRoute
+  MarketingRoute: typeof MarketingRoute
   PackagesRoute: typeof PackagesRoute
   PartsRoute: typeof PartsRoute
   PosRoute: typeof PosRoute
@@ -389,6 +402,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof KitchenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/marketing': {
+      id: '/marketing'
+      path: '/marketing'
+      fullPath: '/marketing'
+      preLoaderRoute: typeof MarketingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/packages': {
       id: '/packages'
       path: '/packages'
@@ -468,6 +488,7 @@ const rootRouteChildren: RootRouteChildren = {
   InventoryRoute: InventoryRoute,
   JobsRoute: JobsRoute,
   KitchenRoute: KitchenRoute,
+  MarketingRoute: MarketingRoute,
   PackagesRoute: PackagesRoute,
   PartsRoute: PartsRoute,
   PosRoute: PosRoute,
