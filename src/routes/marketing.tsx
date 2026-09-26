@@ -50,7 +50,7 @@ function MarketingPage() {
   const accent = config.accent;
 
   return (
-    <div className="min-h-screen bg-[#FBF9F5] text-[#1B1A17] antialiased">
+    <div className="market min-h-screen bg-[#FBF9F5] text-[#1B1A17] antialiased">
       {/* Nav */}
       <header className="sticky top-0 z-40 border-b border-[#E7E1D6] bg-[#FBF9F5]/90 backdrop-blur">
         <div className="mx-auto flex max-w-6xl flex-col gap-3 px-5 py-3 lg:flex-row lg:items-center lg:justify-between">
