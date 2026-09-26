@@ -194,4 +194,4 @@ export const verticals: VerticalConfig[] = [
 ];
 
 export const verticalByKey = (key: string | undefined): VerticalConfig =>
-  verticals.find((vertical) => vertical.key === key) ?? verticals[0];
+  verticals.find((vertical) => vertical.key === key) ?? verticals[0] as VerticalConfig;

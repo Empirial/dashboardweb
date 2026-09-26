@@ -21,7 +21,6 @@ import { Route as GuestsRouteImport } from './routes/guests'
 import { Route as InventoryRouteImport } from './routes/inventory'
 import { Route as JobsRouteImport } from './routes/jobs'
 import { Route as KitchenRouteImport } from './routes/kitchen'
-import { Route as MarketingRouteImport } from './routes/marketing'
 import { Route as PackagesRouteImport } from './routes/packages'
 import { Route as PartsRouteImport } from './routes/parts'
 import { Route as PosRouteImport } from './routes/pos'
@@ -31,6 +30,7 @@ import { Route as RoomsRouteImport } from './routes/rooms'
 import { Route as SchedulingRouteImport } from './routes/scheduling'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as StaffRouteImport } from './routes/staff'
+import { Route as MarketingIndexRouteImport } from './routes/marketing.index'
 import { Route as MarketingVerticalRouteImport } from './routes/marketing.$vertical'
 import { Route as MarketingVerticalAboutRouteImport } from './routes/marketing.$vertical.about'
 import { Route as MarketingVerticalExploreRouteImport } from './routes/marketing.$vertical.explore'
@@ -95,11 +95,6 @@ const KitchenRoute = KitchenRouteImport.update({
   path: '/kitchen',
   getParentRoute: () => rootRouteImport,
 } as any)
-const MarketingRoute = MarketingRouteImport.update({
-  id: '/marketing',
-  path: '/marketing',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const PackagesRoute = PackagesRouteImport.update({
   id: '/packages',
   path: '/packages',
@@ -145,10 +140,15 @@ const StaffRoute = StaffRouteImport.update({
   path: '/staff',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MarketingIndexRoute = MarketingIndexRouteImport.update({
+  id: '/marketing/',
+  path: '/marketing/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MarketingVerticalRoute = MarketingVerticalRouteImport.update({
-  id: '/$vertical',
-  path: '/$vertical',
-  getParentRoute: () => MarketingRoute,
+  id: '/marketing/$vertical',
+  path: '/marketing/$vertical',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const MarketingVerticalAboutRoute = MarketingVerticalAboutRouteImport.update({
   id: '/about',
@@ -175,7 +175,6 @@ export interface FileRoutesByFullPath {
   '/inventory': typeof InventoryRoute
   '/jobs': typeof JobsRoute
   '/kitchen': typeof KitchenRoute
-  '/marketing': typeof MarketingRouteWithChildren
   '/packages': typeof PackagesRoute
   '/parts': typeof PartsRoute
   '/pos': typeof PosRoute
@@ -186,6 +185,7 @@ export interface FileRoutesByFullPath {
   '/settings': typeof SettingsRoute
   '/staff': typeof StaffRoute
   '/marketing/$vertical': typeof MarketingVerticalRouteWithChildren
+  '/marketing/': typeof MarketingIndexRoute
   '/marketing/$vertical/about': typeof MarketingVerticalAboutRoute
   '/marketing/$vertical/explore': typeof MarketingVerticalExploreRoute
 }
@@ -202,7 +202,6 @@ export interface FileRoutesByTo {
   '/inventory': typeof InventoryRoute
   '/jobs': typeof JobsRoute
   '/kitchen': typeof KitchenRoute
-  '/marketing': typeof MarketingRouteWithChildren
   '/packages': typeof PackagesRoute
   '/parts': typeof PartsRoute
   '/pos': typeof PosRoute
@@ -213,6 +212,7 @@ export interface FileRoutesByTo {
   '/settings': typeof SettingsRoute
   '/staff': typeof StaffRoute
   '/marketing/$vertical': typeof MarketingVerticalRouteWithChildren
+  '/marketing': typeof MarketingIndexRoute
   '/marketing/$vertical/about': typeof MarketingVerticalAboutRoute
   '/marketing/$vertical/explore': typeof MarketingVerticalExploreRoute
 }
@@ -230,7 +230,6 @@ export interface FileRoutesById {
   '/inventory': typeof InventoryRoute
   '/jobs': typeof JobsRoute
   '/kitchen': typeof KitchenRoute
-  '/marketing': typeof MarketingRouteWithChildren
   '/packages': typeof PackagesRoute
   '/parts': typeof PartsRoute
   '/pos': typeof PosRoute
@@ -241,6 +240,7 @@ export interface FileRoutesById {
   '/settings': typeof SettingsRoute
   '/staff': typeof StaffRoute
   '/marketing/$vertical': typeof MarketingVerticalRouteWithChildren
+  '/marketing/': typeof MarketingIndexRoute
   '/marketing/$vertical/about': typeof MarketingVerticalAboutRoute
   '/marketing/$vertical/explore': typeof MarketingVerticalExploreRoute
 }
@@ -259,7 +259,6 @@ export interface FileRouteTypes {
     | '/inventory'
     | '/jobs'
     | '/kitchen'
-    | '/marketing'
     | '/packages'
     | '/parts'
     | '/pos'
@@ -270,6 +269,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/staff'
     | '/marketing/$vertical'
+    | '/marketing/'
     | '/marketing/$vertical/about'
     | '/marketing/$vertical/explore'
   fileRoutesByTo: FileRoutesByTo
@@ -286,7 +286,6 @@ export interface FileRouteTypes {
     | '/inventory'
     | '/jobs'
     | '/kitchen'
-    | '/marketing'
     | '/packages'
     | '/parts'
     | '/pos'
@@ -297,6 +296,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/staff'
     | '/marketing/$vertical'
+    | '/marketing'
     | '/marketing/$vertical/about'
     | '/marketing/$vertical/explore'
   id:
@@ -313,7 +313,6 @@ export interface FileRouteTypes {
     | '/inventory'
     | '/jobs'
     | '/kitchen'
-    | '/marketing'
     | '/packages'
     | '/parts'
     | '/pos'
@@ -324,6 +323,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/staff'
     | '/marketing/$vertical'
+    | '/marketing/'
     | '/marketing/$vertical/about'
     | '/marketing/$vertical/explore'
   fileRoutesById: FileRoutesById
@@ -341,7 +341,6 @@ export interface RootRouteChildren {
   InventoryRoute: typeof InventoryRoute
   JobsRoute: typeof JobsRoute
   KitchenRoute: typeof KitchenRoute
-  MarketingRoute: typeof MarketingRouteWithChildren
   PackagesRoute: typeof PackagesRoute
   PartsRoute: typeof PartsRoute
   PosRoute: typeof PosRoute
@@ -351,6 +350,8 @@ export interface RootRouteChildren {
   SchedulingRoute: typeof SchedulingRoute
   SettingsRoute: typeof SettingsRoute
   StaffRoute: typeof StaffRoute
+  MarketingVerticalRoute: typeof MarketingVerticalRouteWithChildren
+  MarketingIndexRoute: typeof MarketingIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -439,13 +440,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof KitchenRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/marketing': {
-      id: '/marketing'
-      path: '/marketing'
-      fullPath: '/marketing'
-      preLoaderRoute: typeof MarketingRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/packages': {
       id: '/packages'
       path: '/packages'
@@ -509,12 +503,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StaffRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/marketing/': {
+      id: '/marketing/'
+      path: '/marketing'
+      fullPath: '/marketing/'
+      preLoaderRoute: typeof MarketingIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/marketing/$vertical': {
       id: '/marketing/$vertical'
-      path: '/$vertical'
+      path: '/marketing/$vertical'
       fullPath: '/marketing/$vertical'
       preLoaderRoute: typeof MarketingVerticalRouteImport
-      parentRoute: typeof MarketingRoute
+      parentRoute: typeof rootRouteImport
     }
     '/marketing/$vertical/about': {
       id: '/marketing/$vertical/about'
@@ -546,18 +547,6 @@ const MarketingVerticalRouteChildren: MarketingVerticalRouteChildren = {
 const MarketingVerticalRouteWithChildren =
   MarketingVerticalRoute._addFileChildren(MarketingVerticalRouteChildren)
 
-interface MarketingRouteChildren {
-  MarketingVerticalRoute: typeof MarketingVerticalRouteWithChildren
-}
-
-const MarketingRouteChildren: MarketingRouteChildren = {
-  MarketingVerticalRoute: MarketingVerticalRouteWithChildren,
-}
-
-const MarketingRouteWithChildren = MarketingRoute._addFileChildren(
-  MarketingRouteChildren,
-)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppointmentsRoute: AppointmentsRoute,
@@ -571,7 +560,6 @@ const rootRouteChildren: RootRouteChildren = {
   InventoryRoute: InventoryRoute,
   JobsRoute: JobsRoute,
   KitchenRoute: KitchenRoute,
-  MarketingRoute: MarketingRouteWithChildren,
   PackagesRoute: PackagesRoute,
   PartsRoute: PartsRoute,
   PosRoute: PosRoute,
@@ -581,6 +569,8 @@ const rootRouteChildren: RootRouteChildren = {
   SchedulingRoute: SchedulingRoute,
   SettingsRoute: SettingsRoute,
   StaffRoute: StaffRoute,
+  MarketingVerticalRoute: MarketingVerticalRouteWithChildren,
+  MarketingIndexRoute: MarketingIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { ArrowRight, Check, Menu, Minus, Plus, ShoppingBag, X } from "lucide-react";
+import { ArrowRight, Check, Menu, Minus, Plus, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -11,7 +11,7 @@ type PageKind = "home" | "about" | "explore";
 export function BusinessSite({ config, page = "home" }: { config: VerticalConfig; page?: PageKind }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [bookingOpen, setBookingOpen] = useState(false);
-  const [selected, setSelected] = useState(config.offerings[0].name);
+  const [selected, setSelected] = useState(config.offerings[0]?.name ?? config.brand);
   const [bagCount, setBagCount] = useState(0);
   const isRetail = config.key === "retail";
 
