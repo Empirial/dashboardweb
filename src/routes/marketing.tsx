@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowRight, Check, KeyRound, Phone, Mail, ScissorsLineDash, ShoppingBasket, SprayCan, Wrench, X } from "lucide-react";
+import { ArrowRight, Check, KeyRound, Phone, Mail, Scissors, ShoppingBasket, SprayCan, Wrench, X } from "lucide-react";
 import { verticals, verticalByKey, type VerticalKey } from "@/lib/marketing-data";
 
 export const Route = createFileRoute("/marketing")({
@@ -21,7 +21,7 @@ const icons: Record<VerticalKey, typeof KeyRound> = {
   hotel: KeyRound,
   property: SprayCan,
   retail: ShoppingBasket,
-  salon: ScissorsLineDash,
+  salon: Scissors,
   auto: Wrench,
 };
 
