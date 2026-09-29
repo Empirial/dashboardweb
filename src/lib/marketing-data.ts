@@ -8,6 +8,7 @@ import salonHero from "@/assets/empirial-salon-hero.jpg";
 import salonDetail from "@/assets/empirial-salon-detail.jpg";
 import autoHero from "@/assets/empirial-auto-hero.jpg";
 import autoDetail from "@/assets/empirial-auto-detail.jpg";
+import type { Niche } from "@/lib/product";
 
 export type VerticalKey = "hotel" | "property" | "retail" | "salon" | "auto";
 
@@ -33,6 +34,12 @@ export type VerticalConfig = {
   aboutTitle: string;
   about: string;
   promise: string;
+  experienceTitle: string;
+  experience: string;
+  closingTitle: string;
+  closingText: string;
+  managementPath: "/" | "/scheduling" | "/inventory" | "/appointments" | "/jobs";
+  managementNiche: Niche;
   highlights: [string, string, string];
   offerings: Offering[];
   formTitle: string;
@@ -56,6 +63,12 @@ export const verticals: VerticalConfig[] = [
     aboutTitle: "Made for unhurried stays",
     about: "Empirial Hotels brings together restful interiors, thoughtful hosting and the quiet of the landscape. Every stay is personal, comfortable and easy from arrival to departure.",
     promise: "A considered lodge experience with the warmth of home.",
+    experienceTitle: "Arrive, exhale, and let us take care of the details",
+    experience: "Start with breakfast on the terrace, spend the afternoon exploring, and return to a room prepared for a quiet evening. Your stay moves at your pace.",
+    closingTitle: "Ready for your home from home?",
+    closingText: "Choose your room and dates, and begin planning a restorative stay.",
+    managementPath: "/",
+    managementNiche: "hospitality",
     highlights: ["Breakfast included", "Private terraces", "Flexible check-in"],
     offerings: [
       { name: "Garden Room", detail: "King bed · private terrace · breakfast", price: "From R1 850 / night", tag: "2 guests" },
@@ -86,6 +99,12 @@ export const verticals: VerticalConfig[] = [
     aboutTitle: "Property, handled personally",
     about: "We connect people with inviting homes and dependable property care. Local knowledge, responsive service and clear communication shape every viewing and every visit.",
     promise: "Beautiful homes, thoughtful service and people who pick up the phone.",
+    experienceTitle: "See the whole picture before you make a move",
+    experience: "From a private viewing to practical questions about the neighbourhood, we give you the time and local context to choose with confidence.",
+    closingTitle: "Could your next place be here?",
+    closingText: "Arrange a private viewing and experience the property in person.",
+    managementPath: "/scheduling",
+    managementNiche: "cleaning",
     highlights: ["Private viewings", "Local specialists", "Property care"],
     offerings: [
       { name: "Parkview Courtyard Home", detail: "3 bedrooms · 2 bathrooms · garden", price: "R3 850 000", tag: "For sale" },
@@ -116,6 +135,12 @@ export const verticals: VerticalConfig[] = [
     aboutTitle: "Fewer, better things",
     about: "Empirial Living is a thoughtful edit of homeware, clothing and gifts. We choose honest materials, useful forms and pieces that become better with time.",
     promise: "A slower, more considered way to shop.",
+    experienceTitle: "Objects with a place in everyday life",
+    experience: "Our collection brings useful forms, honest materials and local craft together in a calm shopping experience designed around discovery.",
+    closingTitle: "Find something worth keeping",
+    closingText: "Browse the latest edit of homeware, clothing and thoughtful gifts.",
+    managementPath: "/inventory",
+    managementNiche: "retail",
     highlights: ["Local makers", "Natural materials", "Nationwide delivery"],
     offerings: [
       { name: "Stone Carafe", detail: "Hand-finished ceramic · 1.2 litre", price: "R680", tag: "Home" },
@@ -146,6 +171,12 @@ export const verticals: VerticalConfig[] = [
     aboutTitle: "Care is part of the service",
     about: "Our stylists begin by listening. From everyday maintenance to a complete new look, we protect the health of your hair while creating a finish that feels like you.",
     promise: "Expert hands, considered products and time reserved just for you.",
+    experienceTitle: "Your appointment begins with listening",
+    experience: "We make space for a proper consultation, a comfortable service and clear aftercare so your finished look remains healthy and easy to wear.",
+    closingTitle: "Make time for your best hair day",
+    closingText: "Choose your service and preferred date, and reserve your chair.",
+    managementPath: "/appointments",
+    managementNiche: "beauty",
     highlights: ["Natural hair specialists", "Protective styling", "Personal consultations"],
     offerings: [
       { name: "Knotless Braids", detail: "Consultation · wash · finish", price: "From R1 200", tag: "3–5 hours" },
@@ -176,6 +207,12 @@ export const verticals: VerticalConfig[] = [
     aboutTitle: "Good work, clearly explained",
     about: "Empirial Auto combines experienced technicians with careful diagnostics. We explain what your car needs, agree the work with you and keep you informed until the keys are back in your hand.",
     promise: "Professional workshop care without the guesswork.",
+    experienceTitle: "Know what your car needs and why",
+    experience: "We inspect carefully, explain clearly and agree the work before it begins. You stay informed from drop-off to collection.",
+    closingTitle: "Keep your car ready for the road",
+    closingText: "Tell us what you drive and choose a preferred workshop date.",
+    managementPath: "/jobs",
+    managementNiche: "automotive",
     highlights: ["Clear estimates", "Experienced technicians", "Quality parts"],
     offerings: [
       { name: "Essential Service", detail: "Oil · filters · safety inspection", price: "From R1 950", tag: "Routine care" },
