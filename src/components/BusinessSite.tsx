@@ -1,10 +1,14 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { ArrowRight, Check, Menu, Minus, Plus, ShoppingBag } from "lucide-react";
+import { format } from "date-fns";
+import { ArrowRight, CalendarIcon, Check, LayoutDashboard, Menu, Minus, Plus, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { verticals, type VerticalConfig } from "@/lib/marketing-data";
+import { useProduct } from "@/lib/product";
 
 type PageKind = "home" | "about" | "explore";
 
@@ -13,6 +17,7 @@ export function BusinessSite({ config, page = "home" }: { config: VerticalConfig
   const [bookingOpen, setBookingOpen] = useState(false);
   const [selected, setSelected] = useState(config.offerings[0]?.name ?? config.brand);
   const [bagCount, setBagCount] = useState(0);
+  const { setNiche } = useProduct();
   const isRetail = config.key === "retail";
 
   const takeAction = (name?: string) => {
@@ -36,6 +41,7 @@ export function BusinessSite({ config, page = "home" }: { config: VerticalConfig
           </nav>
           <div className="flex items-center gap-2">
             {isRetail && <span className="hidden items-center gap-1 text-xs sm:flex"><ShoppingBag className="size-4" /> {bagCount}</span>}
+            <Button variant="outline" size="sm" className="hidden border-primary-foreground/35 bg-primary-foreground/10 text-primary-foreground backdrop-blur hover:bg-primary-foreground/20 hover:text-primary-foreground lg:inline-flex" asChild><Link to={config.managementPath} onClick={() => setNiche(config.managementNiche)}><LayoutDashboard />Management</Link></Button>
             <Button className="site-button hidden sm:inline-flex" onClick={() => setBookingOpen(true)}>{config.primaryCta}</Button>
             <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setMenuOpen((open) => !open)} aria-label="Open navigation"><Menu /></Button>
           </div>
@@ -45,10 +51,11 @@ export function BusinessSite({ config, page = "home" }: { config: VerticalConfig
           <Link to="/marketing/$vertical/explore" params={{ vertical: config.key }}>{config.exploreLabel}</Link>
           <Link to="/marketing/$vertical/about" params={{ vertical: config.key }}>About</Link>
           <button type="button" onClick={() => setBookingOpen(true)}>Contact</button>
+           <Link to={config.managementPath} onClick={() => setNiche(config.managementNiche)} className="flex items-center gap-2"><LayoutDashboard className="size-4" />Management</Link>
         </div>}
       </header>
 
-      {page === "home" && <>
+      {page === "home" && <main>
         <section className="business-hero">
           <img src={config.hero} alt={`${config.brand} experience`} width={1600} height={1067} className="absolute inset-0 size-full object-cover" />
           <div className="business-hero-wash absolute inset-0" />
@@ -81,7 +88,12 @@ export function BusinessSite({ config, page = "home" }: { config: VerticalConfig
           <img src={config.detailImage} alt={`${config.brand} detail`} loading="lazy" width={1200} height={1200} className="aspect-square w-full object-cover" />
         </section>
         <OfferingGrid config={config} onAction={takeAction} />
-      </>}
+         <section className="mx-auto grid max-w-7xl gap-10 px-5 py-20 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:px-8">
+           <img src={config.hero} alt={`${config.brand} customer experience`} loading="lazy" width={1600} height={1067} className="aspect-[4/3] size-full object-cover" />
+           <div><p className="site-kicker">The experience</p><h2 className="mt-4 font-display text-4xl font-semibold leading-tight sm:text-5xl">{config.experienceTitle}</h2><p className="mt-6 text-base leading-relaxed text-muted-foreground">{config.experience}</p><div className="mt-8 grid grid-cols-3 gap-3 border-t border-line pt-6">{config.highlights.map((item, index) => <div key={item}><span className="text-xs font-bold text-site-accent">0{index + 1}</span><p className="mt-2 text-sm font-medium">{item}</p></div>)}</div></div>
+         </section>
+         <section className="site-footer"><div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-8 px-5 py-20 sm:flex-row sm:items-end lg:px-8"><div><p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary-foreground/55">Begin here</p><h2 className="mt-4 max-w-2xl font-display text-4xl font-semibold leading-tight sm:text-5xl">{config.closingTitle}</h2><p className="mt-5 max-w-xl text-primary-foreground/70">{config.closingText}</p></div><Button size="lg" className="site-button shrink-0" onClick={() => setBookingOpen(true)}>{config.primaryCta}<ArrowRight /></Button></div></section>
+       </main>}
 
       {page === "about" && <main>
         <section className="mx-auto grid max-w-7xl gap-10 px-5 pb-20 pt-28 lg:grid-cols-2 lg:items-center lg:px-8 lg:pt-36">
@@ -117,5 +129,10 @@ function OfferingGrid({ config, onAction, expanded = false }: { config: Vertical
 function ActionDialog({ config, selected, open, onOpenChange }: { config: VerticalConfig; selected: string; open: boolean; onOpenChange: (open: boolean) => void }) {
   const [sent, setSent] = useState(false);
   const [quantity, setQuantity] = useState(1);
-  return <Dialog open={open} onOpenChange={(next) => { onOpenChange(next); if (!next) window.setTimeout(() => setSent(false), 200); }}><DialogContent className="business-site max-h-[90vh] overflow-y-auto border-line bg-paper p-0 sm:max-w-xl" data-site={config.key}><div className="h-32 overflow-hidden"><img src={config.detailImage} alt="" className="size-full object-cover" /></div><div className="p-6"><DialogHeader><DialogTitle className="font-display text-3xl">{sent ? "Thank you" : config.formTitle}</DialogTitle><DialogDescription className="leading-relaxed">{sent ? `Your request for ${selected} has been received. This is a prototype, so no payment or message was sent.` : config.formDescription}</DialogDescription></DialogHeader>{sent ? <Button className="site-button mt-6 w-full" onClick={() => onOpenChange(false)}>Done</Button> : <form className="mt-6 grid gap-4" onSubmit={(event) => { event.preventDefault(); setSent(true); }}><div className="border border-line bg-background p-3 text-sm"><span className="text-muted-foreground">Selected</span><strong className="float-right">{selected}</strong></div>{config.formFields.map((field) => field.label === "Quantity" ? <label key={field.label} className="text-sm font-medium">{field.label}<span className="mt-2 flex w-fit items-center border border-line"><Button type="button" variant="ghost" size="icon" onClick={() => setQuantity((value) => Math.max(1, value - 1))}><Minus /></Button><span className="w-10 text-center">{quantity}</span><Button type="button" variant="ghost" size="icon" onClick={() => setQuantity((value) => value + 1)}><Plus /></Button></span></label> : <label key={field.label} className="text-sm font-medium">{field.label}<Input required type={field.type} placeholder={field.placeholder} min={field.type === "number" ? 1 : undefined} className="mt-2 h-11 bg-background" /></label>)}<Button type="submit" className="site-button mt-2 h-11">{config.key === "retail" ? "Complete mock order" : "Send request"}</Button></form>}</div></DialogContent></Dialog>;
+  const [dates, setDates] = useState<Record<string, Date | undefined>>({});
+  return <Dialog open={open} onOpenChange={(next) => { onOpenChange(next); if (!next) window.setTimeout(() => setSent(false), 200); }}><DialogContent className="business-site max-h-[90vh] overflow-y-auto border-line bg-paper p-0 sm:max-w-xl" data-site={config.key}><div className="h-32 overflow-hidden"><img src={config.detailImage} alt="" className="size-full object-cover" /></div><div className="p-6"><DialogHeader><DialogTitle className="font-display text-3xl">{sent ? "Thank you" : config.formTitle}</DialogTitle><DialogDescription className="leading-relaxed">{sent ? `Your request for ${selected} has been received. This is a prototype, so no payment or message was sent.` : config.formDescription}</DialogHeader>{sent ? <Button className="site-button mt-6 w-full" onClick={() => onOpenChange(false)}>Done</Button> : <form className="mt-6 grid gap-4" onSubmit={(event) => { event.preventDefault(); setSent(true); }}><div className="border border-line bg-background p-3 text-sm"><span className="text-muted-foreground">Selected</span><strong className="float-right">{selected}</strong></div>{config.formFields.map((field) => field.label === "Quantity" ? <label key={field.label} className="text-sm font-medium">{field.label}<span className="mt-2 flex w-fit items-center border border-line"><Button type="button" variant="ghost" size="icon" onClick={() => setQuantity((value) => Math.max(1, value - 1))}><Minus /></Button><span className="w-10 text-center">{quantity}</span><Button type="button" variant="ghost" size="icon" onClick={() => setQuantity((value) => value + 1)}><Plus /></Button></span></label> : field.type === "date" ? <DateField key={field.label} label={field.label} value={dates[field.label]} onChange={(date) => setDates((current) => ({ ...current, [field.label]: date }))} /> : <label key={field.label} className="text-sm font-medium">{field.label}<Input required type={field.type} placeholder={field.placeholder} min={field.type === "number" ? 1 : undefined} className="mt-2 h-11 bg-background" /></label>)}<Button type="submit" className="site-button mt-2 h-11">{config.key === "retail" ? "Complete mock order" : "Send request"}</Button></form>}</div></DialogContent></Dialog>;
+}
+
+function DateField({ label, value, onChange }: { label: string; value?: Date; onChange: (date: Date | undefined) => void }) {
+  return <div className="text-sm font-medium"><span>{label}</span><input required className="sr-only" tabIndex={-1} value={value ? format(value, "yyyy-MM-dd") : ""} onChange={() => undefined} /><Popover><PopoverTrigger asChild><Button type="button" variant="outline" className="mt-2 h-11 w-full justify-start bg-background text-left font-normal"><CalendarIcon />{value ? format(value, "dd MMMM yyyy") : "Choose a date"}</Button></PopoverTrigger><PopoverContent className="pointer-events-auto w-auto p-0" align="start"><Calendar mode="single" selected={value} onSelect={onChange} initialFocus className="pointer-events-auto p-3" /></PopoverContent></Popover></div>;
 }
