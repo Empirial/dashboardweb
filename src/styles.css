@@ -253,13 +253,16 @@
 }
 
 .business-nav {
-  position: absolute;
-  inset: 0 0 auto;
+  position: fixed;
+  inset: 0.75rem 0.75rem auto;
   z-index: 40;
   color: var(--primary-foreground);
-  border-bottom: 1px solid color-mix(in oklab, var(--primary-foreground) 20%, transparent);
-  background: color-mix(in oklab, var(--primary) 22%, transparent);
-  backdrop-filter: blur(14px);
+  margin-inline: auto;
+  max-width: 80rem;
+  border: 1px solid color-mix(in oklab, var(--primary-foreground) 24%, transparent);
+  border-radius: 1rem;
+  background: color-mix(in oklab, var(--primary) 58%, transparent);
+  backdrop-filter: blur(22px) saturate(145%);
 }
 
 .site-nav-link { font-size: 0.875rem; font-weight: 600; color: inherit; opacity: 0.82; transition: opacity 160ms; }
@@ -273,3 +276,7 @@
 .site-kicker { color: var(--site-accent); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.18em; }
 .site-band { background: var(--muted); }
 .site-footer { background: var(--primary); color: var(--primary-foreground); }
+
+@media (min-width: 1280px) {
+  .business-nav { inset-inline: 1.5rem; }
+}
