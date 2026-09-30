@@ -33,7 +33,7 @@ export function BusinessSite({ config, page = "home" }: { config: VerticalConfig
           <Link to="/marketing/$vertical" params={{ vertical: config.key }} className="font-display text-xl font-semibold">
             {config.brand}
           </Link>
-          <nav className="hidden items-center gap-8 md:flex">
+          <nav className="hidden items-center gap-7 lg:flex">
             <Link to="/marketing/$vertical" params={{ vertical: config.key }} className="site-nav-link">Home</Link>
             <Link to="/marketing/$vertical/explore" params={{ vertical: config.key }} className="site-nav-link">{config.exploreLabel}</Link>
             <Link to="/marketing/$vertical/about" params={{ vertical: config.key }} className="site-nav-link">About</Link>
@@ -41,12 +41,12 @@ export function BusinessSite({ config, page = "home" }: { config: VerticalConfig
           </nav>
           <div className="flex items-center gap-2">
             {isRetail && <span className="hidden items-center gap-1 text-xs sm:flex"><ShoppingBag className="size-4" /> {bagCount}</span>}
-            <Button variant="outline" size="sm" className="hidden border-primary-foreground/35 bg-primary-foreground/10 text-primary-foreground backdrop-blur hover:bg-primary-foreground/20 hover:text-primary-foreground lg:inline-flex" asChild><Link to={config.managementPath} onClick={() => setNiche(config.managementNiche)}><LayoutDashboard />Management</Link></Button>
-            <Button className="site-button hidden sm:inline-flex" onClick={() => setBookingOpen(true)}>{config.primaryCta}</Button>
-            <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setMenuOpen((open) => !open)} aria-label="Open navigation"><Menu /></Button>
+            <Button variant="outline" size="sm" className="hidden border-primary-foreground/35 bg-primary-foreground/10 text-primary-foreground backdrop-blur hover:bg-primary-foreground/20 hover:text-primary-foreground sm:inline-flex" asChild><Link to={config.managementPath} onClick={() => setNiche(config.managementNiche)}><LayoutDashboard />Management</Link></Button>
+            <Button className="site-button hidden xl:inline-flex" onClick={() => setBookingOpen(true)}>{config.primaryCta}</Button>
+            <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => setMenuOpen((open) => !open)} aria-label="Open navigation"><Menu /></Button>
           </div>
         </div>
-        {menuOpen && <div className="site-mobile-menu md:hidden">
+        {menuOpen && <div className="site-mobile-menu lg:hidden">
           <Link to="/marketing/$vertical" params={{ vertical: config.key }}>Home</Link>
           <Link to="/marketing/$vertical/explore" params={{ vertical: config.key }}>{config.exploreLabel}</Link>
           <Link to="/marketing/$vertical/about" params={{ vertical: config.key }}>About</Link>
@@ -112,7 +112,7 @@ export function BusinessSite({ config, page = "home" }: { config: VerticalConfig
         <div className="mx-auto grid max-w-7xl gap-10 px-5 py-12 sm:grid-cols-3 lg:px-8">
           <div><p className="font-display text-xl font-semibold">{config.brand}</p><p className="mt-3 max-w-xs text-sm text-primary-foreground/65">{config.promise}</p></div>
           <div><p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary-foreground/50">Visit another Empirial site</p><div className="mt-4 flex flex-wrap gap-x-4 gap-y-2">{verticals.filter((site) => site.key !== config.key).map((site) => <Link key={site.key} to="/marketing/$vertical" params={{ vertical: site.key }} className="text-sm hover:underline">{site.tab}</Link>)}</div></div>
-          <div className="sm:text-right"><Link to="/marketing" className="text-sm font-semibold">Empirial Designs portfolio</Link><br/><Link to="/" className="mt-3 inline-block text-sm text-primary-foreground/65">Client management</Link></div>
+          <div className="sm:text-right"><Link to="/marketing" className="text-sm font-semibold">Empirial Designs portfolio</Link><br/><Link to={config.managementPath} onClick={() => setNiche(config.managementNiche)} className="mt-3 inline-block text-sm text-primary-foreground/65">Client management</Link></div>
         </div>
         <div className="border-t border-primary-foreground/10 py-5 text-center text-xs text-primary-foreground/45">© 2026 Empirial Designs · 065 185 9143</div>
       </footer>
