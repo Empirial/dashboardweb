@@ -12,3 +12,4 @@
 - Keep every industry in one registry-driven mock product context so navigation and shared pages change without forked apps.
 - Preserve Hospitality as the default niche because existing booking and POS workflows depend on it.
 - Build customer marketing sites from one registry-driven route system so each business has distinct content without forked applications.
+- Map each marketing site's Management action through the registry so it selects the matching industry before opening that industry's dashboard.
