@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { AppShell, Panel, Stat } from "@/components/AppShell";
 import { BookRoomDialog } from "@/components/BookRoomDialog";
+import { MonthCalendar } from "@/components/MonthCalendar";
 import {
   rand,
   rooms as allRooms,
@@ -27,12 +28,14 @@ export const Route = createFileRoute("/rooms")({
       { title: "Room Board · Empirial Hotel Ops" },
       {
         name: "description",
-        content: "Housekeeping, availability calendar and room booking for every Empirial Hotel room.",
+        content:
+          "Housekeeping, availability calendar and room booking for every Empirial Hotel room.",
       },
       { property: "og:title", content: "Room Board · Empirial Hotel Ops" },
       {
         property: "og:description",
-        content: "Live housekeeping status, a 14-night availability calendar and instant room booking.",
+        content:
+          "Live housekeeping status, a 30-day availability calendar and instant room booking.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
@@ -62,11 +65,24 @@ function Rooms() {
     }, {});
   }, []);
 
-  const days = useMemo(() => calendarDays(TODAY, 14), []);
+  const days = useMemo(() => calendarDays(TODAY, 30), []);
+  const arrivals = useMemo(
+    () =>
+      reservations.map((r) => ({
+        id: r.id,
+        date: r.start,
+        label: `${r.guest} · Rm ${r.room}`,
+        detail: `${r.roomType} · ${r.nights} night${r.nights === 1 ? "" : "s"} · ${r.source}`,
+      })),
+    [reservations],
+  );
+  const sellable = allRooms.filter((r) => r.status !== "ooo").length;
   const shown = filter === "all" ? allRooms : allRooms.filter((r) => r.status === filter);
   const floors = [1, 2, 3];
 
-  const soldTonight = allRooms.filter((r) => bookedNights(reservations, r.number).has(TODAY)).length;
+  const soldTonight = allRooms.filter((r) =>
+    bookedNights(reservations, r.number).has(TODAY),
+  ).length;
 
   return (
     <AppShell>
@@ -77,15 +93,42 @@ function Rooms() {
         <Stat label="Out of order" value={counts["ooo"] ?? 0} sub="maintenance" />
       </div>
 
+      <Panel title="30-day calendar">
+        <MonthCalendar
+          events={arrivals}
+          emptyText="No arrivals on this day."
+          renderSelected={(date) => {
+            const sold = allRooms.filter((r) => bookedNights(reservations, r.number).has(date)).length;
+            return (
+              <div className="flex items-center gap-3">
+                <span className="text-xs text-muted-foreground">
+                  {sold} of {sellable} rooms sold
+                </span>
+                <button
+                  onClick={() => setDialog({ start: date })}
+                  className="rounded-md bg-primary px-2.5 py-1.5 text-[11px] font-semibold text-primary-foreground"
+                >
+                  Book this date
+                </button>
+              </div>
+            );
+          }}
+        />
+        <p className="mt-3 text-[11px] text-muted-foreground">
+          Chips show guest arrivals. Select a day to see its occupancy and book a room.
+        </p>
+      </Panel>
+
       <Panel
-        title="Availability calendar"
+        title="Availability by room"
         action={
           <div className="flex items-center gap-3 text-[10px] text-muted-foreground">
             <span className="flex items-center gap-1.5">
               <i className="inline-block size-2.5 rounded-sm bg-ink" /> Booked
             </span>
             <span className="flex items-center gap-1.5">
-              <i className="inline-block size-2.5 rounded-sm border border-border bg-secondary" /> Free
+              <i className="inline-block size-2.5 rounded-sm border border-border bg-secondary" />{" "}
+              Free
             </span>
             <button
               onClick={() => setDialog({})}
@@ -97,7 +140,7 @@ function Rooms() {
         }
       >
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[640px] border-separate border-spacing-0">
+          <table className="w-full min-w-[1100px] border-separate border-spacing-0">
             <thead>
               <tr>
                 <th className="sticky left-0 z-10 bg-paper pb-2 pr-3 text-left text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
@@ -124,7 +167,9 @@ function Rooms() {
                   <tr key={room.number}>
                     <td className="sticky left-0 z-10 bg-paper py-0.5 pr-3">
                       <div className="flex items-center gap-1.5">
-                        <i className={`inline-block size-1.5 rounded-full ${statusDot[room.status]}`} />
+                        <i
+                          className={`inline-block size-1.5 rounded-full ${statusDot[room.status]}`}
+                        />
                         <span className="font-mono text-[11px] tnum">{room.number}</span>
                         <span className="text-[10px] text-muted-foreground">{room.type}</span>
                       </div>

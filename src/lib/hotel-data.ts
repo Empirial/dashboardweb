@@ -167,10 +167,42 @@ export type Guest = {
 };
 
 export const guests: Guest[] = [
-  { name: "Thabo Mokoena", initials: "TM", room: "209", phone: "082 441 0921", stays: 12, folio: 2313, tier: "VIP" },
-  { name: "Lerato Khumalo", initials: "LK", room: "204", phone: "071 220 8814", stays: 5, folio: 7890, tier: "Returning" },
-  { name: "Ravi Pillay", initials: "RP", room: "108", phone: "083 907 3312", stays: 2, folio: 3140, tier: "Returning" },
-  { name: "Jabu Ndlovu", initials: "JN", room: "303", phone: "079 118 4470", stays: 1, folio: 3400, tier: "New" },
+  {
+    name: "Thabo Mokoena",
+    initials: "TM",
+    room: "209",
+    phone: "082 441 0921",
+    stays: 12,
+    folio: 2313,
+    tier: "VIP",
+  },
+  {
+    name: "Lerato Khumalo",
+    initials: "LK",
+    room: "204",
+    phone: "071 220 8814",
+    stays: 5,
+    folio: 7890,
+    tier: "Returning",
+  },
+  {
+    name: "Ravi Pillay",
+    initials: "RP",
+    room: "108",
+    phone: "083 907 3312",
+    stays: 2,
+    folio: 3140,
+    tier: "Returning",
+  },
+  {
+    name: "Jabu Ndlovu",
+    initials: "JN",
+    room: "303",
+    phone: "079 118 4470",
+    stays: 1,
+    folio: 3400,
+    tier: "New",
+  },
   { name: "Sanet Botha", initials: "SB", phone: "084 332 7710", stays: 8, folio: 0, tier: "VIP" },
   { name: "Anke van Wyk", initials: "AV", phone: "072 654 1180", stays: 1, folio: 0, tier: "New" },
 ];
@@ -234,4 +266,7 @@ export const posOutlets = [
 
 // Deterministic ZAR formatting (avoids SSR/client locale mismatches).
 export const rand = (value: number) =>
-  "R" + Math.round(value).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  "R" +
+  Math.round(value)
+    .toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, " ");

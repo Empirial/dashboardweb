@@ -1,7 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { AppShell, Panel, Stat } from "@/components/AppShell";
-import { bookings as allBookings, kpis, rand, type Booking } from "@/lib/hotel-data";
+import { MonthCalendar } from "@/components/MonthCalendar";
+import { bookings as seedBookings, kpis, rand, type Booking } from "@/lib/hotel-data";
+import { shortDay, useReservations, type Reservation } from "@/lib/reservations";
 
 export const Route = createFileRoute("/bookings")({
   head: () => ({
@@ -9,7 +11,8 @@ export const Route = createFileRoute("/bookings")({
       { title: "Bookings · Empirial Hotel Ops" },
       {
         name: "description",
-        content: "Reservations, arrivals and departures for Empirial Hotel with channel and folio totals.",
+        content:
+          "Reservations, arrivals and departures for Empirial Hotel with channel and folio totals.",
       },
       { property: "og:title", content: "Bookings · Empirial Hotel Ops" },
       {
@@ -38,8 +41,37 @@ const statusPill: Record<Booking["status"], string> = {
   Pending: "bg-dirty/10 text-dirty-foreground",
 };
 
+const initialsOf = (name: string) =>
+  name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part.charAt(0).toUpperCase())
+    .join("");
+
+// Bookings made on the website or the register are reservations, not seeded bookings.
+const fromReservation = (r: Reservation): Booking => ({
+  ref: r.id,
+  guest: r.guest,
+  initials: initialsOf(r.guest),
+  roomType: r.roomType,
+  room: r.room,
+  nights: r.nights,
+  arrival: shortDay(r.start),
+  time: "14:00",
+  total: r.total,
+  status: "Confirmed",
+  channel: r.source === "POS" || r.source === "Front desk" ? "Walk-in" : r.source,
+});
+
 function Bookings() {
   const [tab, setTab] = useState<Booking["status"] | "All">("All");
+  const reservations = useReservations();
+  const newest = reservations
+    .filter((r) => !seedBookings.some((b) => b.ref === r.id))
+    .map(fromReservation)
+    .reverse();
+  const allBookings = [...newest, ...seedBookings];
   const shown = tab === "All" ? allBookings : allBookings.filter((b) => b.status === tab);
 
   return (
@@ -50,6 +82,18 @@ function Bookings() {
         <Stat label="In house" value={kpis.occupied} sub="guests on property" />
         <Stat label="Booked value" value={rand(24760)} sub="next 7 days" />
       </div>
+
+      <Panel title="Arrivals · next 30 days">
+        <MonthCalendar
+          events={reservations.map((r) => ({
+            id: r.id,
+            date: r.start,
+            label: `${r.guest} · Rm ${r.room}`,
+            detail: `${r.roomType} · ${r.nights} night${r.nights === 1 ? "" : "s"} · ${r.source}`,
+          }))}
+          emptyText="No arrivals on this day."
+        />
+      </Panel>
 
       <Panel title="Reservations">
         <div className="mb-3 flex gap-1 overflow-x-auto">

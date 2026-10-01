@@ -1,2 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router"; import { ModulePage } from "@/components/ModulePage";
-export const Route = createFileRoute("/quotes")({ head: () => ({ meta: [{ title: "Quotes · Empirial POS" }, { name: "description", content: "Automotive estimates and job conversion." }, { property: "og:title", content: "Quotes · Empirial POS" }, { property: "og:description", content: "Automotive estimates and job conversion." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }), component: () => <ModulePage moduleKey="quotes" /> });
+import { createFileRoute } from "@tanstack/react-router";
+import { ModulePage } from "@/components/ModulePage";
+import { pageMeta } from "@/lib/page-meta";
+
+export const Route = createFileRoute("/quotes")({
+  head: () => pageMeta("Quotes · Empirial POS", "Automotive estimates and job conversion."),
+  component: () => <ModulePage moduleKey="quotes" />,
+});

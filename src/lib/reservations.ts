@@ -1,7 +1,9 @@
-// Shared mock reservation store. Lives in memory so the Rooms calendar and the
-// POS register both read and write the same bookings during a session.
-import { useEffect, useState } from "react";
+// Shared mock reservation store. The Rooms calendar, Bookings list, POS register and
+// the public hotel website all read and write the same bookings. Bookings added in the
+// demo are saved to localStorage; the seed data is regenerated relative to today.
+import { useMemo } from "react";
 import { bookings, rooms, type Room } from "./hotel-data";
+import { createPersistedStore } from "./persisted-store";
 
 export type Reservation = {
   id: string;
@@ -17,11 +19,11 @@ export type Reservation = {
   payment?: "Card" | "Cash" | "Charged to room" | "Unpaid";
 };
 
-/** Operational "today" for this mock property. */
-export const TODAY = "2026-03-12";
-
 export const dayKey = (d: Date) =>
   `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+
+/** Operational "today" for this mock property. */
+export const TODAY = dayKey(new Date());
 
 export const parseDay = (key: string) => {
   const [y, m, d] = key.split("-").map(Number);
@@ -107,34 +109,23 @@ const seed: Reservation[] = [
   },
 ];
 
-let state: Reservation[] = seed;
-const listeners = new Set<(r: Reservation[]) => void>();
+const added = createPersistedStore<Reservation[]>("reservations", []);
 
-const emit = () => listeners.forEach((l) => l(state));
-
-export const getReservations = () => state;
+export const getReservations = () => [...seed, ...added.get()];
 
 export const addReservation = (r: Omit<Reservation, "id" | "total">) => {
   const created: Reservation = {
     ...r,
-    id: `EMP-${5000 + state.length}`,
+    id: `EMP-${5000 + seed.length + added.get().length}`,
     total: r.rate * r.nights,
   };
-  state = [...state, created];
-  emit();
+  added.set((current) => [...current, created]);
   return created;
 };
 
 export function useReservations() {
-  const [value, setValue] = useState(state);
-  useEffect(() => {
-    listeners.add(setValue);
-    setValue(state);
-    return () => {
-      listeners.delete(setValue);
-    };
-  }, []);
-  return value;
+  const extra = added.use();
+  return useMemo(() => [...seed, ...extra], [extra]);
 }
 
 /** Nights (yyyy-mm-dd) that a given room is already sold, mapped to the guest. */
@@ -154,9 +145,7 @@ export function isRoomFree(list: Reservation[], room: string, start: string, nig
 export function freeRooms(list: Reservation[], start: string, nights: number, type?: Room["type"]) {
   return rooms.filter(
     (r) =>
-      r.status !== "ooo" &&
-      (!type || r.type === type) &&
-      isRoomFree(list, r.number, start, nights),
+      r.status !== "ooo" && (!type || r.type === type) && isRoomFree(list, r.number, start, nights),
   );
 }
 

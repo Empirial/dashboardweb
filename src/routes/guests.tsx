@@ -1,2 +1,14 @@
 import { createFileRoute, Navigate } from "@tanstack/react-router";
-export const Route = createFileRoute("/guests")({ head: () => ({ meta: [{ title: "Customers · Empirial POS" }, { name: "description", content: "Empirial customer directory." }, { property: "og:title", content: "Customers · Empirial POS" }, { property: "og:description", content: "Empirial customer directory." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }), component: () => <Navigate to="/customers" replace /> });
+export const Route = createFileRoute("/guests")({
+  head: () => ({
+    meta: [
+      { title: "Customers · Empirial POS" },
+      { name: "description", content: "Empirial customer directory." },
+      { property: "og:title", content: "Customers · Empirial POS" },
+      { property: "og:description", content: "Empirial customer directory." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+    ],
+  }),
+  component: () => <Navigate to="/customers" replace />,
+});

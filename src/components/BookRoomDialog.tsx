@@ -136,7 +136,9 @@ export function BookRoomDialog({
             </div>
           </Field>
 
-          <Field label={`Available ${type.toLowerCase()} rooms · ${shortDay(start)} → ${shortDay(addDays(start, nights))}`}>
+          <Field
+            label={`Available ${type.toLowerCase()} rooms · ${shortDay(start)} → ${shortDay(addDays(start, nights))}`}
+          >
             {available.length === 0 ? (
               <p className="rounded-md border border-border bg-secondary px-2.5 py-2 text-[11px] text-muted-foreground">
                 Nothing free for those dates. Try other dates or another room type.

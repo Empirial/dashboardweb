@@ -8,14 +8,16 @@ export const Route = createFileRoute("/marketing/$vertical")({
   },
   head: ({ params }) => {
     const config = verticalByKey(params.vertical);
-    return { meta: [
-      { title: `${config.brand} · ${config.category}` },
-      { name: "description", content: config.sub },
-      { property: "og:title", content: `${config.brand} · ${config.headline}` },
-      { property: "og:description", content: config.sub },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ] };
+    return {
+      meta: [
+        { title: `${config.brand} · ${config.category}` },
+        { name: "description", content: config.sub },
+        { property: "og:title", content: `${config.brand} · ${config.headline}` },
+        { property: "og:description", content: config.sub },
+        { property: "og:type", content: "website" },
+        { name: "twitter:card", content: "summary_large_image" },
+      ],
+    };
   },
   component: VerticalHome,
 });

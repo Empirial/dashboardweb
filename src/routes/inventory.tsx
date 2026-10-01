@@ -1,2 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router"; import { ModulePage } from "@/components/ModulePage";
-export const Route = createFileRoute("/inventory")({ head: () => ({ meta: [{ title: "Inventory · Empirial POS" }, { name: "description", content: "Retail inventory and restock management." }, { property: "og:title", content: "Inventory · Empirial POS" }, { property: "og:description", content: "Retail inventory and restock management." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }), component: () => <ModulePage moduleKey="inventory" /> });
+import { createFileRoute } from "@tanstack/react-router";
+import { ModulePage } from "@/components/ModulePage";
+import { pageMeta } from "@/lib/page-meta";
+
+export const Route = createFileRoute("/inventory")({
+  head: () => pageMeta("Inventory · Empirial POS", "Retail inventory and restock management."),
+  component: () => <ModulePage moduleKey="inventory" />,
+});

@@ -1,2 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router"; import { ModulePage } from "@/components/ModulePage";
-export const Route = createFileRoute("/appointments")({ head: () => ({ meta: [{ title: "Appointments · Empirial POS" }, { name: "description", content: "Beauty appointment calendar and availability." }, { property: "og:title", content: "Appointments · Empirial POS" }, { property: "og:description", content: "Beauty appointment calendar and availability." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }), component: () => <ModulePage moduleKey="appointments" /> });
+import { createFileRoute } from "@tanstack/react-router";
+import { ModulePage } from "@/components/ModulePage";
+import { pageMeta } from "@/lib/page-meta";
+
+export const Route = createFileRoute("/appointments")({
+  head: () =>
+    pageMeta("Appointments · Empirial POS", "Beauty appointment calendar and availability."),
+  component: () => <ModulePage moduleKey="appointments" />,
+});
