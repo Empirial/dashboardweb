@@ -8,6 +8,7 @@ import type { VerticalConfig } from "./marketing-data";
 import { createPersistedStore } from "./persisted-store";
 import {
   moduleRecords,
+  weekSeries,
   type ModuleKey,
   type ModuleRecord,
   type NicheConfig,
@@ -27,6 +28,8 @@ import {
 
 export type Sale = {
   id: string;
+  /** yyyy-mm-dd; missing on sales saved by older versions, which count as today. */
+  day?: string;
   niche: Niche;
   total: number;
   method: string;
@@ -112,7 +115,10 @@ export const recordSale = (
 ) =>
   live.set((current) => ({
     ...current,
-    sales: [...current.sales, { id: uid(), niche, total, method, items, time: stamp() }],
+    sales: [
+      ...current.sales,
+      { id: uid(), niche, total, method, items, time: stamp(), day: TODAY },
+    ],
     feed: [
       {
         id: uid(),
@@ -540,3 +546,33 @@ export const setBookingStatus = (ref: string, status: string) =>
     ...current,
     bookingStatus: { ...(current.bookingStatus ?? {}), [ref]: status },
   }));
+
+const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+/**
+ * Revenue for the last seven days ending today. The baseline keeps a fresh demo looking busy;
+ * sales rung up at the register or placed on a website are added to today's bar.
+ */
+export function useWeekRevenue(niche: Niche) {
+  const { sales } = live.use();
+  return useMemo(() => {
+    const weightTotal = weekSeries.reduce((total, weight) => total + weight, 0);
+    const rows = Array.from({ length: 7 }, (_, index) => {
+      const date = addDays(TODAY, index - 6);
+      const baseline = Math.round(
+        (baselines[niche].revenue * (weekSeries[index] ?? 0)) / weightTotal,
+      );
+      const liveTotal = sales
+        .filter((sale) => sale.niche === niche && (sale.day ?? TODAY) === date)
+        .reduce((total, sale) => total + sale.total, 0);
+      return {
+        date,
+        label: index === 6 ? "Today" : (DAY_NAMES[parseDay(date).getDay()] ?? ""),
+        baseline,
+        live: liveTotal,
+        total: baseline + liveTotal,
+      };
+    });
+    return { rows, max: Math.max(1, ...rows.map((row) => row.total)) };
+  }, [sales, niche]);
+}

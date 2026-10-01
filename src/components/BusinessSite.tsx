@@ -1,10 +1,10 @@
-import { Link } from "@tanstack/react-router";
-import { useState, type FormEvent } from "react";
-import { addDays, format } from "date-fns";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState, type FormEvent } from "react";
+import { addDays } from "date-fns";
 import {
   ArrowRight,
-  CalendarIcon,
   Clock,
+  Compass,
   LayoutDashboard,
   Menu,
   Minus,
@@ -14,8 +14,8 @@ import {
   Sparkles,
   Star,
 } from "lucide-react";
+import { DateField } from "@/components/DateField";
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
 import {
   Dialog,
   DialogContent,
@@ -24,10 +24,10 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { verticals, type VerticalConfig, type VerticalKey } from "@/lib/marketing-data";
 import { submitEnquiry } from "@/lib/demo-data";
 import { useProduct } from "@/lib/product";
+import { exampleDateOffsets, exampleFor, startTour, useTour } from "@/lib/tour";
 import { TODAY, dayKey, parseDay } from "@/lib/reservations";
 
 type PageKind = "home" | "about" | "explore";
@@ -56,7 +56,13 @@ export function BusinessSite({
   const [selected, setSelected] = useState(config.offerings[0]?.name ?? config.brand);
   const [bagCount, setBagCount] = useState(0);
   const { setNiche } = useProduct();
+  const navigate = useNavigate();
   const isRetail = config.key === "retail";
+
+  const beginTour = () => {
+    startTour(config.key);
+    void navigate({ to: "/marketing/$vertical", params: { vertical: config.key } });
+  };
 
   const takeAction = (name?: string) => {
     if (name) setSelected(name);
@@ -99,6 +105,14 @@ export function BusinessSite({
             <button type="button" className="site-nav-link" onClick={() => setBookingOpen(true)}>
               Contact
             </button>
+            <button
+              type="button"
+              className="site-nav-link inline-flex items-center gap-1.5"
+              onClick={beginTour}
+            >
+              <Compass className="size-3.5" />
+              Take the tour
+            </button>
           </nav>
           <div className="flex items-center gap-2">
             {isRetail && (
@@ -112,13 +126,18 @@ export function BusinessSite({
               className="hidden border-primary-foreground/35 bg-primary-foreground/10 text-primary-foreground backdrop-blur hover:bg-primary-foreground/20 hover:text-primary-foreground sm:inline-flex"
               asChild
             >
-              <Link to={config.managementPath} onClick={() => setNiche(config.managementNiche)}>
+              <Link
+                to={config.managementPath}
+                data-tour="nav-management"
+                onClick={() => setNiche(config.managementNiche)}
+              >
                 <LayoutDashboard />
                 Management
               </Link>
             </Button>
             <Button
               className="site-button hidden xl:inline-flex"
+              data-tour="nav-cta"
               onClick={() => setBookingOpen(true)}
             >
               {config.primaryCta}
@@ -157,6 +176,15 @@ export function BusinessSite({
             >
               Contact
             </button>
+            <button
+              type="button"
+              onClick={() => {
+                setMenuOpen(false);
+                beginTour();
+              }}
+            >
+              Take the tour
+            </button>
             <Link
               to={config.managementPath}
               onClick={() => setNiche(config.managementNiche)}
@@ -193,7 +221,12 @@ export function BusinessSite({
                   {config.sub}
                 </p>
                 <div className="mt-8 flex flex-wrap gap-3">
-                  <Button size="lg" className="site-button" onClick={() => setBookingOpen(true)}>
+                  <Button
+                    size="lg"
+                    className="site-button"
+                    data-tour="hero-cta"
+                    onClick={() => setBookingOpen(true)}
+                  >
                     {config.primaryCta}
                     <ArrowRight />
                   </Button>
@@ -589,6 +622,8 @@ function ActionDialog({
   onOpenChange: (open: boolean) => void;
 }) {
   const { setNiche } = useProduct();
+  const tour = useTour();
+  const prefill = tour.active && tour.seed > 0 && tour.key === config.key;
   const [result, setResult] = useState<{ ok: boolean; message: string } | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [dates, setDates] = useState<Record<string, Date | undefined>>({});
@@ -605,6 +640,18 @@ function ActionDialog({
       return { min: addDays(dates["Check in"] ?? today, 1), max: addDays(today, 30) };
     return { min: today, max: addDays(today, 29) };
   };
+
+  // "Fill in an example for me" in the guided tour pre-fills the dates (text fields below).
+  useEffect(() => {
+    if (!prefill || !open) return;
+    const offsets = exampleDateOffsets(config.key);
+    setDates(
+      Object.fromEntries(
+        Object.entries(offsets).map(([label, days]) => [label, addDays(today, days)]),
+      ),
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [prefill, tour.seed, open, config.key]);
 
   const changeDate = (label: string, date: Date | undefined) =>
     setDates((current) => {
@@ -643,6 +690,13 @@ function ActionDialog({
       <DialogContent
         className="business-site max-h-[94vh] gap-0 overflow-y-auto border-line bg-paper p-0 sm:max-w-3xl"
         data-site={config.key}
+        data-tour="form"
+        onInteractOutside={(event) => {
+          // Pressing the tour card must not close the form.
+          if ((event.target as HTMLElement | null)?.closest?.("[data-tour-ui]")) {
+            event.preventDefault();
+          }
+        }}
       >
         <div className="grid md:grid-cols-[0.8fr_1.4fr]">
           <div className="relative hidden md:block">
@@ -676,7 +730,11 @@ function ActionDialog({
             {sent ? (
               <div className="mt-5 grid gap-2">
                 <Button variant="outline" className="h-11" asChild>
-                  <Link to={config.managementPath} onClick={() => setNiche(config.managementNiche)}>
+                  <Link
+                    to={config.managementPath}
+                    data-tour="see-management"
+                    onClick={() => setNiche(config.managementNiche)}
+                  >
                     <LayoutDashboard />
                     See it in Management
                   </Link>
@@ -735,6 +793,8 @@ function ActionDialog({
                     <label key={field.label} className="text-sm font-medium">
                       {field.label}
                       <Input
+                        key={`${field.label}-${tour.seed}`}
+                        defaultValue={prefill ? exampleFor(config.key, field.label) : undefined}
                         required
                         name={field.label}
                         type={field.type}
@@ -753,7 +813,11 @@ function ActionDialog({
                     {result.message}
                   </p>
                 )}
-                <Button type="submit" className="site-button h-11 sm:col-span-2">
+                <Button
+                  type="submit"
+                  data-tour="form-submit"
+                  className="site-button h-11 sm:col-span-2"
+                >
                   {config.key === "retail" ? "Complete demo order" : "Send request"}
                 </Button>
               </form>
@@ -762,55 +826,5 @@ function ActionDialog({
         </div>
       </DialogContent>
     </Dialog>
-  );
-}
-
-function DateField({
-  label,
-  value,
-  min,
-  max,
-  onChange,
-}: {
-  label: string;
-  value: Date | undefined;
-  min: Date;
-  max?: Date | undefined;
-  onChange: (date: Date | undefined) => void;
-}) {
-  return (
-    <div className="text-sm font-medium">
-      <span>{label}</span>
-      <input
-        required
-        className="sr-only"
-        tabIndex={-1}
-        value={value ? format(value, "yyyy-MM-dd") : ""}
-        onChange={() => undefined}
-      />
-      <Popover>
-        <PopoverTrigger asChild>
-          <Button
-            type="button"
-            variant="outline"
-            className="mt-1.5 h-10 w-full justify-start bg-background text-left font-normal"
-          >
-            <CalendarIcon />
-            {value ? format(value, "dd MMM yyyy") : "Choose a date"}
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="pointer-events-auto w-auto p-0" align="start">
-          <Calendar
-            mode="single"
-            selected={value}
-            onSelect={onChange}
-            defaultMonth={value ?? min}
-            disabled={(day) => day < min || (max !== undefined && day > max)}
-            initialFocus
-            className="pointer-events-auto p-3"
-          />
-        </PopoverContent>
-      </Popover>
-    </div>
   );
 }

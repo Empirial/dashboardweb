@@ -405,3 +405,23 @@ html {
 [id] {
   scroll-margin-top: 5.5rem;
 }
+
+.tour-spotlight {
+  border: 2px solid #fff;
+  animation: tour-pulse 1.6s ease-in-out infinite;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5);
+}
+
+@keyframes tour-pulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 9999px rgba(0, 0, 0, 0.5),
+      0 0 0 0 rgba(255, 255, 255, 0.7);
+  }
+  50% {
+    box-shadow:
+      0 0 0 9999px rgba(0, 0, 0, 0.5),
+      0 0 0 10px rgba(255, 255, 255, 0);
+  }
+}

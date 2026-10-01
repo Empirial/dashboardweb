@@ -144,6 +144,7 @@ function Register() {
                   <Button
                     key={item.id}
                     variant="secondary"
+                    data-tour="catalog-item"
                     onClick={() => addToCart(item)}
                     className="h-20 flex-col items-start whitespace-normal p-3 text-left"
                   >
@@ -247,7 +248,11 @@ function Register() {
             )}
             {!payment ? (
               <div className="mt-4 grid grid-cols-2 gap-2">
-                <Button disabled={!cart.length} onClick={() => setPayment("Card")}>
+                <Button
+                  data-tour="pay-card"
+                  disabled={!cart.length}
+                  onClick={() => setPayment("Card")}
+                >
                   <CreditCard />
                   Card
                 </Button>
@@ -325,6 +330,7 @@ function Register() {
                 )}
                 <Button
                   className="w-full"
+                  data-tour="settle"
                   disabled={payment === "Cash" && change < 0}
                   onClick={settle}
                 >

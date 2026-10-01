@@ -1,10 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowUpRight, ChevronRight } from "lucide-react";
 import { AppShell, PageIntro, Panel, Stat } from "@/components/AppShell";
+import { RevenueChart } from "@/components/RevenueChart";
 import { Button } from "@/components/ui/button";
 import { liveKpis, useLive, useRevenue } from "@/lib/demo-data";
 import { rand } from "@/lib/hotel-data";
-import { nicheConfigs, weekSeries } from "@/lib/platform-data";
+import { nicheConfigs } from "@/lib/platform-data";
 import { useProduct } from "@/lib/product";
 import { useReservations } from "@/lib/reservations";
 
@@ -73,38 +74,12 @@ function Overview() {
       <div className="grid gap-4 xl:grid-cols-[1.45fr_1fr]">
         <Panel
           title="Revenue · last 7 days"
+          tour="revenue-chart"
           action={
             <span className="font-display text-sm font-semibold tnum">{rand(revenue.revenue)}</span>
           }
         >
-          <div className="flex h-44 items-end gap-2">
-            {weekSeries.map((value, index) => (
-              <div key={index} className="flex h-full flex-1 flex-col justify-end gap-2">
-                <div
-                  className="relative overflow-hidden rounded-t-xl border border-border bg-secondary"
-                  style={{ height: `${value}%` }}
-                >
-                  <div
-                    className="absolute inset-x-0 bottom-0 bg-primary"
-                    style={{ height: `${Math.round(value * 0.72)}%` }}
-                  />
-                </div>
-                <span className="text-center text-[10px] text-muted-foreground">
-                  {["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"][index]}
-                </span>
-              </div>
-            ))}
-          </div>
-          <div className="mt-4 flex gap-5 text-[10px] uppercase tracking-[0.1em] text-muted-foreground">
-            <span>
-              <i className="mr-2 inline-block size-2 rounded-full bg-primary" />
-              {config.revenueLabels[0]}
-            </span>
-            <span>
-              <i className="mr-2 inline-block size-2 rounded-full bg-muted-foreground" />
-              {config.revenueLabels[1]}
-            </span>
-          </div>
+          <RevenueChart niche={niche} labels={config.revenueLabels} />
           {revenue.liveCount > 0 && (
             <p className="mt-3 text-xs text-muted-foreground">
               Includes {rand(revenue.liveTotal)} from {revenue.liveCount} live sale
@@ -112,7 +87,7 @@ function Overview() {
             </p>
           )}
         </Panel>
-        <Panel title="Live activity">
+        <Panel title="Live activity" tour="activity">
           <div className="divide-y divide-border">
             {activity.map((item, index) => (
               <div key={`${item.title}-${index}`} className="flex items-center gap-3 py-3">

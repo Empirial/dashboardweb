@@ -1,11 +1,14 @@
 import { useMemo, useState } from "react";
 import { X } from "lucide-react";
+import { DateField } from "@/components/DateField";
 import { rand, rooms as allRooms, type Room } from "@/lib/hotel-data";
 import {
   TODAY,
   addDays,
+  dayKey,
   freeRooms,
   isRoomFree,
+  parseDay,
   shortDay,
   useReservations,
   type Reservation,
@@ -86,14 +89,12 @@ export function BookRoomDialog({
           </Field>
 
           <div className="grid grid-cols-2 gap-3">
-            <Field label="Check-in">
-              <input
-                type="date"
-                value={start}
-                onChange={(e) => setStart(e.target.value || TODAY)}
-                className="w-full rounded-md border border-border bg-secondary px-2.5 py-2 font-mono text-[12px] tnum outline-none focus:border-primary"
-              />
-            </Field>
+            <DateField
+              label="Check-in"
+              value={parseDay(start)}
+              min={parseDay(TODAY)}
+              onChange={(date) => setStart(date ? dayKey(date) : TODAY)}
+            />
             <Field label="Nights">
               <div className="flex items-center gap-1">
                 <button

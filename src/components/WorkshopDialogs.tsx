@@ -7,6 +7,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { NamedDateField } from "@/components/DateField";
 import { Input } from "@/components/ui/input";
 import {
   addCustomer,
@@ -22,7 +23,7 @@ import { customerCopy } from "@/lib/customer-copy";
 import { moduleForms } from "@/lib/module-forms";
 import type { ModuleKey, ModuleRecord } from "@/lib/platform-data";
 import { useProduct, type Niche } from "@/lib/product";
-import { TODAY } from "@/lib/reservations";
+import { TODAY, parseDay } from "@/lib/reservations";
 
 export function FormDialog({
   open,
@@ -374,7 +375,15 @@ export function ModuleFormDialog({
       }}
     >
       {form.fields.map((field) =>
-        field.type === "select" ? (
+        field.type === "date" ? (
+          <NamedDateField
+            key={field.name}
+            label={field.label}
+            name={field.name}
+            min={parseDay(TODAY)}
+            required={field.required ?? true}
+          />
+        ) : field.type === "select" ? (
           <SelectField
             key={field.name}
             label={field.label}

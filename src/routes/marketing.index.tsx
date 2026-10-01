@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Check, LayoutDashboard } from "lucide-react";
+import { useStartTour } from "@/components/DemoGuide";
 import { Button } from "@/components/ui/button";
 import { offer, verticals } from "@/lib/marketing-data";
 import { pageMeta } from "@/lib/page-meta";
@@ -24,6 +25,7 @@ const benefits = [
 ];
 
 function MarketingPortfolio() {
+  const begin = useStartTour();
   return (
     <div className="portfolio min-h-screen bg-background text-foreground">
       <header className="border-b border-line bg-background/90 backdrop-blur">
@@ -57,6 +59,23 @@ function MarketingPortfolio() {
                 below, book or buy as a customer would, then press Management to watch the request
                 arrive in the back office.
               </p>
+              <div className="mt-7">
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                  Take the guided tour
+                </p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {verticals.map((site) => (
+                    <Button
+                      key={site.key}
+                      size="sm"
+                      variant="outline"
+                      onClick={() => begin(site.key)}
+                    >
+                      {site.tab}
+                    </Button>
+                  ))}
+                </div>
+              </div>
             </div>
             <ul className="grid gap-3 border-t border-line pt-6 sm:grid-cols-2 lg:border-l lg:border-t-0 lg:pl-10 lg:pt-0">
               {benefits.map((benefit) => (

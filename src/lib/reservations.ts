@@ -2,7 +2,7 @@
 // the public hotel website all read and write the same bookings. Bookings added in the
 // demo are saved to localStorage; the seed data is regenerated relative to today.
 import { useMemo } from "react";
-import { bookings, rooms, type Room } from "./hotel-data";
+import { bookings, rooms, type Room, type RoomStatus } from "./hotel-data";
 import { createPersistedStore } from "./persisted-store";
 
 export type Reservation = {
@@ -142,10 +142,21 @@ export function isRoomFree(list: Reservation[], room: string, start: string, nig
   return Array.from({ length: nights }, (_, i) => addDays(start, i)).every((n) => !taken.has(n));
 }
 
+const roomStatus = createPersistedStore<Record<string, RoomStatus>>("room-status", {});
+
+/** Housekeeping changes made on the Rooms page, keyed by room number. */
+export const useRoomStatus = roomStatus.use;
+export const setRoomStatus = (number: string, status: RoomStatus) =>
+  roomStatus.set((current) => ({ ...current, [number]: status }));
+export const roomStatusOf = (room: Room): RoomStatus =>
+  roomStatus.get()[room.number] ?? room.status;
+
 export function freeRooms(list: Reservation[], start: string, nights: number, type?: Room["type"]) {
   return rooms.filter(
     (r) =>
-      r.status !== "ooo" && (!type || r.type === type) && isRoomFree(list, r.number, start, nights),
+      roomStatusOf(r) !== "ooo" &&
+      (!type || r.type === type) &&
+      isRoomFree(list, r.number, start, nights),
   );
 }
 

@@ -1,9 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AppShell, PageIntro, Panel, Stat } from "@/components/AppShell";
-import { useRevenue } from "@/lib/demo-data";
+import { RevenueChart } from "@/components/RevenueChart";
+import { useRevenue, useWeekRevenue } from "@/lib/demo-data";
 import { rand } from "@/lib/hotel-data";
 import { pageMeta } from "@/lib/page-meta";
-import { nicheConfigs, weekSeries } from "@/lib/platform-data";
+import { nicheConfigs } from "@/lib/platform-data";
 import { useProduct } from "@/lib/product";
 
 export const Route = createFileRoute("/reports")({
@@ -11,13 +12,14 @@ export const Route = createFileRoute("/reports")({
   component: Reports,
 });
 
-const days = ["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"];
 const categoryTotals = [42860, 31240, 22880, 14620];
 
 function Reports() {
   const { niche } = useProduct();
   const config = nicheConfigs[niche];
   const revenue = useRevenue(niche);
+  const week = useWeekRevenue(niche);
+  const bestDay = week.rows.reduce((best, row) => (row.total > best.total ? row : best));
   const liveNote = revenue.liveCount
     ? ` Includes ${revenue.liveCount} live sale${revenue.liveCount === 1 ? "" : "s"} (${rand(revenue.liveTotal)}) from this demo.`
     : "";
@@ -36,25 +38,10 @@ function Reports() {
           sub={revenue.liveCount ? `${revenue.liveCount} new this session` : "+8% this week"}
         />
         <Stat label="Average sale" value={rand(revenue.average)} sub="Across settled checks" />
-        <Stat label="Best day" value="Friday" sub={rand(revenue.bestDay)} />
+        <Stat label="Best day" value={bestDay.label} sub={rand(bestDay.total)} />
       </div>
       <Panel title="Revenue by day">
-        <div className="flex h-56 items-end gap-3">
-          {weekSeries.map((value, index) => (
-            <div key={days[index]} className="flex h-full flex-1 flex-col justify-end gap-2">
-              <div
-                className="relative overflow-hidden rounded-t-xl border border-border bg-secondary"
-                style={{ height: `${value}%` }}
-              >
-                <div
-                  className="absolute inset-x-0 bottom-0 bg-primary"
-                  style={{ height: `${Math.round(value * 0.68)}%` }}
-                />
-              </div>
-              <span className="text-center text-[10px] text-muted-foreground">{days[index]}</span>
-            </div>
-          ))}
-        </div>
+        <RevenueChart niche={niche} labels={config.revenueLabels} tall />
       </Panel>
       <Panel title="Category performance">
         <div className="divide-y divide-border">

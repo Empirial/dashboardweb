@@ -2,10 +2,11 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { AppShell, Panel, Stat } from "@/components/AppShell";
 import { BookRoomDialog } from "@/components/BookRoomDialog";
+import { addFeed } from "@/lib/demo-data";
 import { MonthCalendar } from "@/components/MonthCalendar";
 import {
   rand,
-  rooms as allRooms,
+  rooms as baseRooms,
   statusClasses,
   statusDot,
   statusLabel,
@@ -18,7 +19,9 @@ import {
   calendarDays,
   isWeekend,
   shortDay,
+  setRoomStatus,
   useReservations,
+  useRoomStatus,
   weekdayLetter,
 } from "@/lib/reservations";
 
@@ -52,18 +55,39 @@ const filters: Array<{ key: RoomStatus | "all"; label: string }> = [
   { key: "ooo", label: "Out of order" },
 ];
 
+const statusNames: Record<RoomStatus, string> = {
+  clean: "Clean",
+  dirty: "Dirty",
+  occupied: "Occupied",
+  ooo: "Out of order",
+};
+
 function Rooms() {
   const [filter, setFilter] = useState<RoomStatus | "all">("all");
   const [dialog, setDialog] = useState<{ room?: string; start?: string } | null>(null);
   const [toast, setToast] = useState<string | null>(null);
   const reservations = useReservations();
+  const statusOverrides = useRoomStatus();
+  const allRooms = useMemo(
+    () => baseRooms.map((r) => ({ ...r, status: statusOverrides[r.number] ?? r.status })),
+    [statusOverrides],
+  );
+
+  const changeRoomStatus = (number: string, status: RoomStatus) => {
+    setRoomStatus(number, status);
+    addFeed(
+      "hospitality",
+      `Room ${number} marked ${statusNames[status].toLowerCase()}`,
+      "Housekeeping",
+    );
+  };
 
   const counts = useMemo(() => {
     return allRooms.reduce<Record<string, number>>((acc, r) => {
       acc[r.status] = (acc[r.status] ?? 0) + 1;
       return acc;
     }, {});
-  }, []);
+  }, [allRooms]);
 
   const days = useMemo(() => calendarDays(TODAY, 30), []);
   const arrivals = useMemo(
@@ -274,6 +298,20 @@ function Rooms() {
                         {rand(room.rate)}
                       </span>
                     </div>
+                    <select
+                      aria-label={`Status of room ${room.number}`}
+                      value={room.status}
+                      onChange={(event) =>
+                        changeRoomStatus(room.number, event.target.value as RoomStatus)
+                      }
+                      className="mt-2 w-full rounded-md border border-border bg-paper px-1.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.1em] text-ink"
+                    >
+                      {(Object.keys(statusNames) as RoomStatus[]).map((status) => (
+                        <option key={status} value={status}>
+                          {statusNames[status]}
+                        </option>
+                      ))}
+                    </select>
                     <button
                       disabled={room.status === "ooo"}
                       onClick={() => setDialog({ room: room.number })}

@@ -27,6 +27,9 @@ import { Button } from "@/components/ui/button";
 import { DemoGuide } from "@/components/DemoGuide";
 import { TODAY, shortDay } from "@/lib/reservations";
 
+// Guided-tour targets for the navigation links.
+const navTourId: Record<string, string> = { "/": "nav-overview", "/pos": "nav-register" };
+
 const core = [
   { to: "/", label: "Overview", icon: LayoutDashboard },
   { to: "/pos", label: "Register", icon: Receipt },
@@ -102,6 +105,7 @@ export function AppShell({
             <Link
               key={item.to}
               to={item.to}
+              data-tour={navTourId[item.to]}
               activeOptions={{ exact: item.to === "/" }}
               title={item.label}
               className="flex h-10 items-center gap-3 rounded-xl px-3 text-[13px] font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
@@ -169,6 +173,7 @@ export function AppShell({
           <Link
             key={item.to}
             to={item.to}
+            data-tour={navTourId[item.to]}
             activeOptions={{ exact: item.to === "/" }}
             className="flex min-w-0 flex-1 flex-col items-center gap-1 rounded-xl py-2 text-[9px] font-medium text-muted-foreground"
             activeProps={{ className: "bg-primary text-primary-foreground" }}
@@ -208,14 +213,17 @@ export function Panel({
   action,
   children,
   className = "",
+  tour,
 }: {
   title?: string;
   action?: ReactNode;
   children: ReactNode;
   className?: string;
+  /** Marks the panel as a guided-tour target. */
+  tour?: string | undefined;
 }) {
   return (
-    <section className={`panel rise ${className}`}>
+    <section data-tour={tour} className={`panel rise ${className}`}>
       {(title || action) && (
         <div className="flex min-h-14 items-center justify-between gap-3 border-b border-border px-4 py-3 sm:px-5">
           {title && <h3 className="font-display text-sm font-semibold">{title}</h3>}

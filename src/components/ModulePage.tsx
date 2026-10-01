@@ -416,6 +416,7 @@ export function ModulePage({ moduleKey }: { moduleKey: ModuleKey }) {
       </div>
       <Panel
         title={title}
+        tour="records"
         action={
           <div className="flex max-w-full flex-wrap items-center gap-2">
             {hasCalendar && (

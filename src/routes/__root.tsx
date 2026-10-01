@@ -11,6 +11,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { TourOverlay } from "../components/TourOverlay";
 import { ProductProvider } from "../lib/product";
 
 function NotFoundComponent() {
@@ -134,6 +135,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <ProductProvider>
         <Outlet />
+        <TourOverlay />
       </ProductProvider>
     </QueryClientProvider>
   );
