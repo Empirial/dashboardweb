@@ -98,7 +98,9 @@ function Rooms() {
           events={arrivals}
           emptyText="No arrivals on this day."
           renderSelected={(date) => {
-            const sold = allRooms.filter((r) => bookedNights(reservations, r.number).has(date)).length;
+            const sold = allRooms.filter((r) =>
+              bookedNights(reservations, r.number).has(date),
+            ).length;
             return (
               <div className="flex items-center gap-3">
                 <span className="text-xs text-muted-foreground">

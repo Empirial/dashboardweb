@@ -1,9 +1,28 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import { Plus, Search } from "lucide-react";
 import { AppShell, Panel, Stat } from "@/components/AppShell";
 import { MonthCalendar } from "@/components/MonthCalendar";
-import { bookings as seedBookings, kpis, rand, type Booking } from "@/lib/hotel-data";
-import { shortDay, useReservations, type Reservation } from "@/lib/reservations";
+import { bookings as seedBookings, rand, type Booking } from "@/lib/hotel-data";
+import { BookRoomDialog } from "@/components/BookRoomDialog";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { addFeed, setBookingStatus, useLive } from "@/lib/demo-data";
+import {
+  TODAY,
+  addDays,
+  addReservation,
+  nightsOf,
+  shortDay,
+  useReservations,
+  type Reservation,
+} from "@/lib/reservations";
 
 export const Route = createFileRoute("/bookings")({
   head: () => ({
@@ -66,21 +85,50 @@ const fromReservation = (r: Reservation): Booking => ({
 
 function Bookings() {
   const [tab, setTab] = useState<Booking["status"] | "All">("All");
+  const [query, setQuery] = useState("");
+  const [viewing, setViewing] = useState<Booking | null>(null);
+  const [newOpen, setNewOpen] = useState(false);
   const reservations = useReservations();
+  const { bookingStatus = {} } = useLive();
+
   const newest = reservations
     .filter((r) => !seedBookings.some((b) => b.ref === r.id))
     .map(fromReservation)
     .reverse();
-  const allBookings = [...newest, ...seedBookings];
-  const shown = tab === "All" ? allBookings : allBookings.filter((b) => b.status === tab);
+  const allBookings = [...newest, ...seedBookings].map((b) => ({
+    ...b,
+    status: (bookingStatus[b.ref] as Booking["status"] | undefined) ?? b.status,
+  }));
+  const shown = allBookings
+    .filter((b) => tab === "All" || b.status === tab)
+    .filter((b) => `${b.guest} ${b.ref} ${b.room}`.toLowerCase().includes(query.toLowerCase()));
+
+  const arrivals = reservations.filter((r) => r.start === TODAY).length;
+  const departures = reservations.filter((r) => addDays(r.start, r.nights) === TODAY).length;
+  const inHouse = reservations.filter((r) => nightsOf(r).includes(TODAY)).length;
+  const bookedValue = reservations
+    .filter((r) => r.start >= TODAY && r.start <= addDays(TODAY, 30))
+    .reduce((total, r) => total + r.total, 0);
+
+  const changeStatus = (booking: Booking, status: Booking["status"]) => {
+    setBookingStatus(booking.ref, status);
+    setViewing({ ...booking, status });
+    if (status === "Checked in" || status === "Checked out") {
+      addFeed(
+        "hospitality",
+        `Guest ${status.toLowerCase()}`,
+        `${booking.guest} · Room ${booking.room}`,
+      );
+    }
+  };
 
   return (
     <AppShell>
       <div className="grid grid-cols-2 gap-2 lg:grid-cols-4">
-        <Stat label="Arrivals today" value={kpis.arrivals} sub={`${kpis.checkedIn} checked in`} />
-        <Stat label="Departures" value={kpis.departures} sub="checkout by 10:00" />
-        <Stat label="In house" value={kpis.occupied} sub="guests on property" />
-        <Stat label="Booked value" value={rand(24760)} sub="next 7 days" />
+        <Stat label="Arrivals today" value={arrivals} sub="Due to check in" />
+        <Stat label="Departures" value={departures} sub="Checkout by 10:00" />
+        <Stat label="In house" value={inHouse} sub="Rooms occupied tonight" />
+        <Stat label="Booked value" value={rand(bookedValue)} sub="Arriving in the next 30 days" />
       </div>
 
       <Panel title="Arrivals · next 30 days">
@@ -95,7 +143,25 @@ function Bookings() {
         />
       </Panel>
 
-      <Panel title="Reservations">
+      <Panel
+        title="Reservations"
+        action={
+          <Button size="sm" onClick={() => setNewOpen(true)}>
+            <Plus />
+            New booking
+          </Button>
+        }
+      >
+        <label className="relative mb-3 block">
+          <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+          <input
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="Search guest, reference or room"
+            aria-label="Search reservations"
+            className="w-full rounded-[14px] border border-border bg-secondary py-2.5 pl-10 pr-4 text-sm outline-none focus:ring-1 focus:ring-ring"
+          />
+        </label>
         <div className="mb-3 flex gap-1 overflow-x-auto">
           {tabs.map((t) => (
             <button
@@ -112,7 +178,11 @@ function Bookings() {
 
         <div className="divide-y divide-line">
           {shown.map((b) => (
-            <div key={b.ref} className="flex items-center gap-3 py-2.5">
+            <button
+              key={b.ref}
+              onClick={() => setViewing(b)}
+              className="flex w-full items-center gap-3 py-2.5 text-left"
+            >
               <div className="grid size-9 place-items-center rounded-full bg-secondary font-mono text-[11px] font-medium">
                 {b.initials}
               </div>
@@ -134,15 +204,75 @@ function Bookings() {
                   {b.status}
                 </span>
               </div>
-            </div>
+            </button>
           ))}
           {shown.length === 0 && (
             <p className="py-6 text-center text-[11px] text-muted-foreground">
-              No reservations in this state.
+              No reservations match.
             </p>
           )}
         </div>
       </Panel>
+
+      <Dialog open={!!viewing} onOpenChange={(next) => !next && setViewing(null)}>
+        <DialogContent className="sm:max-w-md">
+          {viewing && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="font-display">{viewing.guest}</DialogTitle>
+                <DialogDescription>
+                  {viewing.ref} · {viewing.roomType} {viewing.room}
+                </DialogDescription>
+              </DialogHeader>
+              <dl className="divide-y divide-border rounded-2xl border border-border bg-secondary text-sm">
+                {(
+                  [
+                    ["Arrival", `${viewing.arrival} · ${viewing.time}`],
+                    ["Stay", `${viewing.nights} night${viewing.nights > 1 ? "s" : ""}`],
+                    ["Channel", viewing.channel],
+                    ["Folio total", rand(viewing.total)],
+                    ["Status", viewing.status],
+                  ] as const
+                ).map(([label, value]) => (
+                  <div key={label} className="flex justify-between gap-4 px-3 py-2">
+                    <dt className="text-muted-foreground">{label}</dt>
+                    <dd className="text-right font-medium">{value}</dd>
+                  </div>
+                ))}
+              </dl>
+              <div>
+                <p className="mb-2 text-xs font-medium text-muted-foreground">Update status</p>
+                <div className="flex flex-wrap gap-2">
+                  {tabs
+                    .filter((t): t is Booking["status"] => t !== "All")
+                    .map((status) => (
+                      <Button
+                        key={status}
+                        size="sm"
+                        variant={viewing.status === status ? "default" : "outline"}
+                        onClick={() => changeStatus(viewing, status)}
+                      >
+                        {status}
+                      </Button>
+                    ))}
+                </div>
+              </div>
+              <Button variant="secondary" onClick={() => setViewing(null)}>
+                Close
+              </Button>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      <BookRoomDialog
+        open={newOpen}
+        onClose={() => setNewOpen(false)}
+        onConfirm={(draft) => {
+          addReservation({ ...draft, source: "Front desk", payment: "Unpaid" });
+          setNewOpen(false);
+        }}
+      />
     </AppShell>
   );
 }

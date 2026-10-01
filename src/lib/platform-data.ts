@@ -35,7 +35,16 @@ export type NicheConfig = {
   modules: Array<{ key: ModuleKey; label: string }>;
   categories: string[];
   catalog: Array<{ id: string; name: string; category: string; price: number }>;
-  customers: Array<{ name: string; initials: string; detail: string; meta: string; value: string }>;
+  customers: Array<{
+    name: string;
+    initials: string;
+    detail: string;
+    meta: string;
+    value: string;
+    phone?: string;
+    vehicle?: string;
+    problem?: string;
+  }>;
   revenueLabels: [string, string];
   activity: Array<{ title: string; detail: string; time: string }>;
 };
@@ -280,6 +289,9 @@ export const nicheConfigs: Record<Niche, NicheConfig> = {
         detail: "Toyota Fortuner · 2 vehicles",
         meta: "Last service: 18 Aug",
         value: "R24 600",
+        phone: "082 555 0147",
+        vehicle: "Toyota Fortuner",
+        problem: "Major service",
       },
       {
         name: "Grace Adams",
@@ -287,6 +299,9 @@ export const nicheConfigs: Record<Niche, NicheConfig> = {
         detail: "VW Polo · 1 vehicle",
         meta: "Last service: 07 Sep",
         value: "R8 940",
+        phone: "071 555 0192",
+        vehicle: "VW Polo",
+        problem: "Brake service",
       },
     ],
     revenueLabels: ["Labour", "Parts"],

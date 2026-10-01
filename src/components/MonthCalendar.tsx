@@ -12,7 +12,15 @@ export type CalendarEvent = {
 };
 
 const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-const LONG_WEEKDAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const LONG_WEEKDAYS = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
 
 /**
  * A real calendar grid (weeks as rows) covering `days` days from `start`. Days outside the
@@ -65,7 +73,8 @@ export function MonthCalendar({
           </div>
         ))}
         {cells.map((date, index) => {
-          if (!date) return <div key={`blank-${index}`} className="min-h-14 bg-secondary/40 sm:min-h-24" />;
+          if (!date)
+            return <div key={`blank-${index}`} className="min-h-14 bg-secondary/40 sm:min-h-24" />;
           const list = byDate.get(date) ?? [];
           const dayNumber = parseDay(date).getDate();
           const showMonth = date === start || dayNumber === 1;
@@ -84,7 +93,9 @@ export function MonthCalendar({
               <span className="flex items-baseline justify-between gap-1">
                 <span
                   className={`grid size-6 place-items-center rounded-full text-xs tnum ${
-                    date === TODAY ? "bg-primary font-semibold text-primary-foreground" : "font-medium"
+                    date === TODAY
+                      ? "bg-primary font-semibold text-primary-foreground"
+                      : "font-medium"
                   }`}
                 >
                   {dayNumber}
@@ -144,7 +155,9 @@ export function MonthCalendar({
                   <span className="min-w-0">
                     <span className="block truncate text-sm font-medium">{event.label}</span>
                     {event.detail && (
-                      <span className="block truncate text-xs text-muted-foreground">{event.detail}</span>
+                      <span className="block truncate text-xs text-muted-foreground">
+                        {event.detail}
+                      </span>
                     )}
                   </span>
                 </button>

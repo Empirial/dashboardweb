@@ -2,10 +2,11 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowUpRight, ChevronRight } from "lucide-react";
 import { AppShell, PageIntro, Panel, Stat } from "@/components/AppShell";
 import { Button } from "@/components/ui/button";
-import { useLive, useRevenue } from "@/lib/demo-data";
+import { liveKpis, useLive, useRevenue } from "@/lib/demo-data";
 import { rand } from "@/lib/hotel-data";
 import { nicheConfigs, weekSeries } from "@/lib/platform-data";
 import { useProduct } from "@/lib/product";
+import { useReservations } from "@/lib/reservations";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -32,7 +33,16 @@ function Overview() {
   const config = nicheConfigs[niche];
   const firstModule = config.modules[0];
   const revenue = useRevenue(niche);
-  const { feed } = useLive();
+  const { feed, records } = useLive();
+  const reservations = useReservations();
+  const kpis = liveKpis(
+    niche,
+    config.kpis,
+    records,
+    reservations,
+    revenue.liveTotal,
+    revenue.liveCount,
+  );
   const activity = [...feed.filter((item) => item.niche === niche), ...config.activity].slice(0, 6);
   return (
     <AppShell title="Overview">
@@ -56,7 +66,7 @@ function Overview() {
         }
       />
       <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
-        {config.kpis.map((kpi) => (
+        {kpis.map((kpi) => (
           <Stat key={kpi.label} {...kpi} />
         ))}
       </div>

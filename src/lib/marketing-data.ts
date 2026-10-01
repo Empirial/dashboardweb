@@ -42,6 +42,13 @@ export type VerticalConfig = {
   managementPath: "/" | "/scheduling" | "/inventory" | "/appointments" | "/jobs" | "/floor-plan";
   managementNiche: Niche;
   highlights: [string, string, string];
+  /** One line per highlight, shown on the strip under the hero. */
+  highlightText: [string, string, string];
+  /** The problem this system solves for the business. Shown on the portfolio card. */
+  solves: string;
+  testimonials: Array<{ quote: string; name: string; role: string }>;
+  /** CSS object-position for the hero photo, to keep faces in frame. */
+  heroPosition?: string;
   offerings: Offering[];
   formTitle: string;
   formDescription: string;
@@ -51,6 +58,30 @@ export type VerticalConfig = {
 export const verticals: VerticalConfig[] = [
   {
     key: "hotel",
+    solves:
+      "Keeps every room, booking and meal bill in one place. Guests book on your website and the reservation lands on your room calendar, with no double bookings.",
+    highlightText: [
+      "A full breakfast on the terrace every morning.",
+      "Spacious rooms with terraces and views of the bush.",
+      "Early and late arrival options to suit your travel day.",
+    ],
+    testimonials: [
+      {
+        quote: "We arrived tired and left rested. The terrace breakfast alone was worth the drive.",
+        name: "Naledi M.",
+        role: "Weekend guest",
+      },
+      {
+        quote: "Booking took two minutes and our room was exactly as pictured.",
+        name: "Johan & Elmarie V.",
+        role: "Anniversary stay",
+      },
+      {
+        quote: "Warm, quiet and effortless. We have already booked again for December.",
+        name: "Sipho K.",
+        role: "Returning guest",
+      },
+    ],
     tab: "Hotel",
     brand: "Empirial Hotels",
     category: "Boutique lodge",
@@ -76,19 +107,31 @@ export const verticals: VerticalConfig[] = [
     offerings: [
       {
         name: "Garden Room",
-        detail: "King bed · private terrace · breakfast",
-        price: "From R1 850 / night",
+        detail: "King bed, private terrace and a full breakfast each morning.",
+        price: "From R1 840 / night",
         tag: "2 guests",
       },
       {
-        name: "Deluxe Bush Suite",
-        detail: "Lounge · bush views · outdoor shower",
-        price: "From R2 750 / night",
+        name: "Bush Suite",
+        detail: "Separate lounge, outdoor shower and views across the bush.",
+        price: "From R3 400 / night",
         tag: "2 guests",
+      },
+      {
+        name: "Twin Room",
+        detail: "Two comfortable beds, ideal for friends or colleagues travelling together.",
+        price: "From R1 450 / night",
+        tag: "2 guests",
+      },
+      {
+        name: "Single Retreat",
+        detail: "A quiet, well-priced room for the solo traveller.",
+        price: "From R980 / night",
+        tag: "1 guest",
       },
       {
         name: "Family Villa",
-        detail: "Two bedrooms · plunge pool · full breakfast",
+        detail: "Two bedrooms, a plunge pool and breakfast for the whole family.",
         price: "From R4 600 / night",
         tag: "4 guests",
       },
@@ -105,6 +148,30 @@ export const verticals: VerticalConfig[] = [
   },
   {
     key: "property",
+    solves:
+      "Tracks viewings, listings and property-care visits in one schedule. Enquiries from your website go straight onto the right calendar, so no lead goes cold.",
+    highlightText: [
+      "Visit homes on your schedule with a local specialist.",
+      "Agents who know the streets, schools and prices.",
+      "Cleaning, garden and maintenance after you move in.",
+    ],
+    testimonials: [
+      {
+        quote: "They arranged a viewing the same week and answered every question about the area.",
+        name: "Thandi N.",
+        role: "Home buyer",
+      },
+      {
+        quote: "Our rental is spotless and the tenants are always sorted. We never chase anyone.",
+        name: "Mark P.",
+        role: "Landlord",
+      },
+      {
+        quote: "The home care team have become part of our household. Reliable every visit.",
+        name: "Ayesha D.",
+        role: "Homeowner",
+      },
+    ],
     tab: "Property",
     brand: "Empirial Property",
     category: "Homes & property care",
@@ -130,19 +197,31 @@ export const verticals: VerticalConfig[] = [
     offerings: [
       {
         name: "Parkview Courtyard Home",
-        detail: "3 bedrooms · 2 bathrooms · garden",
+        detail: "3 bedrooms, 2 bathrooms and a private garden in a quiet street.",
         price: "R3 850 000",
         tag: "For sale",
       },
       {
         name: "Rosebank City Apartment",
-        detail: "2 bedrooms · balcony · secure parking",
+        detail: "2 bedrooms, a balcony and secure parking close to transport.",
         price: "R18 500 / month",
         tag: "To let",
       },
       {
+        name: "Garden Cottage",
+        detail: "A bright 1-bedroom cottage with its own entrance and patio.",
+        price: "R9 500 / month",
+        tag: "To let",
+      },
+      {
+        name: "Studio Office Suite",
+        detail: "Open-plan office space with meeting room and fibre ready.",
+        price: "R12 800 / month",
+        tag: "Commercial",
+      },
+      {
         name: "Complete Home Care",
-        detail: "Scheduled cleaning · garden · maintenance",
+        detail: "Scheduled cleaning, garden and maintenance after you move in.",
         price: "From R1 450 / visit",
         tag: "Property care",
       },
@@ -158,6 +237,30 @@ export const verticals: VerticalConfig[] = [
   },
   {
     key: "retail",
+    solves:
+      "Connects your online shop and your till to one stock list. An online order updates inventory straight away and every sale shows up in your reports.",
+    highlightText: [
+      "Every piece is made by South African makers we know.",
+      "Linen, ceramic and fibre that age beautifully.",
+      "Tracked delivery to your door, anywhere in the country.",
+    ],
+    testimonials: [
+      {
+        quote: "Everything is beautifully made and arrived wrapped like a gift.",
+        name: "Lindiwe S.",
+        role: "Online customer",
+      },
+      {
+        quote: "The linen shirt gets better with every wash. I keep coming back for gifts.",
+        name: "Chris B.",
+        role: "Regular",
+      },
+      {
+        quote: "Fast delivery, and a real person helped when I needed to swap a size.",
+        name: "Zodwa M.",
+        role: "Customer",
+      },
+    ],
     tab: "Retail",
     brand: "Empirial Living",
     category: "Home & lifestyle shop",
@@ -183,20 +286,32 @@ export const verticals: VerticalConfig[] = [
     offerings: [
       {
         name: "Stone Carafe",
-        detail: "Hand-finished ceramic · 1.2 litre",
+        detail: "Hand-finished ceramic carafe, 1.2 litre.",
         price: "R540",
         tag: "Home",
       },
       {
         name: "Linen Shirt",
-        detail: "Washed linen · olive · relaxed fit",
+        detail: "Washed linen in olive with a relaxed, easy fit.",
         price: "R890",
         tag: "Wear",
       },
       {
         name: "Field Tote",
-        detail: "Natural fibre · reinforced handles",
+        detail: "Natural fibre tote with reinforced handles.",
         price: "R680",
+        tag: "Carry",
+      },
+      {
+        name: "Candle No. 04",
+        detail: "Slow-burning soy candle in a hand-poured ceramic cup.",
+        price: "R280",
+        tag: "Home",
+      },
+      {
+        name: "Leather Wallet",
+        detail: "Vegetable-tanned leather that softens with every year.",
+        price: "R420",
         tag: "Carry",
       },
     ],
@@ -212,6 +327,32 @@ export const verticals: VerticalConfig[] = [
   },
   {
     key: "salon",
+    heroPosition: "52% 40%",
+    solves:
+      "Fills your chairs and ends diary chaos. Clients book online, appointments appear on your calendar and the register knows exactly what they had done.",
+    highlightText: [
+      "Stylists who understand textured and natural hair.",
+      "Braids, twists and styles that protect your hair.",
+      "A proper chat about your hair before we start.",
+    ],
+    testimonials: [
+      {
+        quote:
+          "Finally a stylist who listened. My braids lasted six weeks and my edges are healthy.",
+        name: "Zanele K.",
+        role: "Regular client",
+      },
+      {
+        quote: "The silk press was flawless and nothing was rushed.",
+        name: "Nadia P.",
+        role: "Client",
+      },
+      {
+        quote: "Booking online was easy and they remembered exactly what I like.",
+        name: "Amara S.",
+        role: "Client",
+      },
+    ],
     tab: "Salon",
     brand: "Empirial Salon",
     category: "Hair & beauty studio",
@@ -237,21 +378,33 @@ export const verticals: VerticalConfig[] = [
     offerings: [
       {
         name: "Knotless Braids",
-        detail: "Consultation · wash · finish",
+        detail: "Consultation, wash, braiding and a finish that lasts weeks.",
         price: "From R1 200",
-        tag: "3–5 hours",
+        tag: "3 to 5 hours",
       },
       {
         name: "Silk Press",
-        detail: "Wash · treatment · heat-protected finish",
+        detail: "Wash, treatment and a heat-protected, glossy finish.",
         price: "From R650",
         tag: "90 minutes",
       },
       {
         name: "Curl Ritual",
-        detail: "Hydration · shaping · definition",
+        detail: "Deep hydration, shaping and definition for natural curls.",
         price: "From R780",
         tag: "2 hours",
+      },
+      {
+        name: "Protective Twists",
+        detail: "Neat twists that protect your ends and save you styling time.",
+        price: "From R950",
+        tag: "2 to 3 hours",
+      },
+      {
+        name: "Wash & Blow-dry",
+        detail: "A relaxed wash and smooth blow-dry for any day or event.",
+        price: "From R320",
+        tag: "1 hour",
       },
     ],
     formTitle: "Reserve your chair",
@@ -266,6 +419,34 @@ export const verticals: VerticalConfig[] = [
   },
   {
     key: "auto",
+    solves:
+      "Runs your workshop from drop-off to collection. Job cards, quotes, parts and customer contacts live in one place, and bookings arrive from your website.",
+    highlightText: [
+      "A written quote before any work starts, with no surprises.",
+      "Qualified technicians with years on the same makes.",
+      "Genuine and approved parts, backed by warranty.",
+    ],
+    testimonials: [
+      {
+        quote:
+          "They explained the brake problem, showed me the old pads and quoted before starting. Honest work.",
+        name: "Peter M.",
+        role: "Toyota Fortuner owner",
+      },
+      {
+        quote:
+          "Booked online at night and the car was ready when they said. I won't go anywhere else.",
+        name: "Grace A.",
+        role: "VW Polo owner",
+      },
+      {
+        quote:
+          "Our fleet of four has been serviced here for a year. No surprises on the invoice, ever.",
+        name: "Greenway Ltd",
+        role: "Fleet customer",
+      },
+    ],
+    heroPosition: "62% 12%",
     tab: "Auto",
     brand: "Empirial Auto",
     category: "Vehicle care & repair",
@@ -291,21 +472,34 @@ export const verticals: VerticalConfig[] = [
     offerings: [
       {
         name: "Essential Service",
-        detail: "Oil · filters · safety inspection",
+        detail: "Oil and filter change, fluid top-ups and a 40-point safety inspection.",
         price: "From R1 950",
         tag: "Routine care",
       },
       {
         name: "Brake Inspection",
-        detail: "Pads · discs · fluid · road test",
+        detail: "Pads, discs and fluid checked, with a road test and a written report.",
         price: "From R650",
         tag: "Safety",
       },
       {
         name: "Engine Diagnostics",
-        detail: "Electronic scan · technician assessment",
+        detail: "Electronic fault scan and a technician's assessment explained in plain language.",
         price: "From R850",
         tag: "Diagnostics",
+      },
+      {
+        name: "Tyres & Alignment",
+        detail: "Fitting, balancing and wheel alignment to stop uneven wear.",
+        price: "From R520",
+        tag: "Handling",
+      },
+      {
+        name: "Full Workshop Repair",
+        detail:
+          "Suspension, clutch, cooling and gearbox work, quoted and approved before we start.",
+        price: "Quoted per job",
+        tag: "Repairs",
       },
     ],
     formTitle: "Book your car in",
@@ -319,6 +513,31 @@ export const verticals: VerticalConfig[] = [
   },
   {
     key: "restaurant",
+    solves:
+      "Takes reservations online, shows every table and kitchen ticket live, and splits and settles bills at the register, so service stays calm on a full night.",
+    highlightText: [
+      "Menus that change with what is fresh and in season.",
+      "Candlelit tables outside, with views over the valley.",
+      "Space for celebrations and business dinners up to 20.",
+    ],
+    testimonials: [
+      {
+        quote:
+          "The kingklip was perfect and the sunset made the evening. Best table in the valley.",
+        name: "Nomsa D.",
+        role: "Diner",
+      },
+      {
+        quote: "We hosted twenty guests and the team handled everything calmly.",
+        name: "David H.",
+        role: "Private dining",
+      },
+      {
+        quote: "Easy to reserve, quick to seat and careful about my allergies.",
+        name: "Priya N.",
+        role: "Guest",
+      },
+    ],
     tab: "Restaurant",
     brand: "Empirial Table",
     category: "Restaurant & bar",
@@ -344,16 +563,33 @@ export const verticals: VerticalConfig[] = [
     offerings: [
       {
         name: "Grilled Kingklip",
-        detail: "Cape Malay butter · charred greens",
+        detail: "Cape Malay butter, charred greens and crisp potatoes.",
         price: "R245",
         tag: "Main",
       },
-      { name: "Short Rib", detail: "Slow braised · smoked mash · jus", price: "R275", tag: "Main" },
+      {
+        name: "Short Rib",
+        detail: "Slow braised, with smoked mash and a rich jus.",
+        price: "R275",
+        tag: "Main",
+      },
+      {
+        name: "Burrata",
+        detail: "Creamy burrata, roasted tomatoes and warm focaccia.",
+        price: "R125",
+        tag: "Starter",
+      },
       {
         name: "Malva Pudding",
-        detail: "Warm apricot sponge · custard",
+        detail: "Warm apricot sponge with vanilla custard.",
         price: "R82",
         tag: "Dessert",
+      },
+      {
+        name: "Chenin Glass",
+        detail: "A crisp local Chenin, poured by the glass.",
+        price: "R78",
+        tag: "Wine",
       },
     ],
     formTitle: "Reserve a table",
@@ -367,6 +603,30 @@ export const verticals: VerticalConfig[] = [
   },
   {
     key: "cleaning",
+    solves:
+      "Schedules crews, handles recurring billing and captures every request from your website, so no job and no invoice slips through the cracks.",
+    highlightText: [
+      "Background-checked, trained and insured teams.",
+      "Weekly, fortnightly or monthly, with the same crew.",
+      "Products that are safe for children, pets and the planet.",
+    ],
+    testimonials: [
+      {
+        quote: "The office feels brand new after the deep clean. They even did inside the oven.",
+        name: "Rosebank Dental",
+        role: "Weekly office clean",
+      },
+      {
+        quote: "The same friendly crew every fortnight, and one simple invoice at month end.",
+        name: "S. Naidoo",
+        role: "Home client",
+      },
+      {
+        quote: "I booked online in minutes and the team arrived on time with everything.",
+        name: "Lerato K.",
+        role: "Once-off clean",
+      },
+    ],
     tab: "Cleaning",
     brand: "Empirial Clean",
     category: "Home & office cleaning",
@@ -392,21 +652,33 @@ export const verticals: VerticalConfig[] = [
     offerings: [
       {
         name: "2-bed Home Clean",
-        detail: "Kitchen · bathrooms · floors · dusting",
+        detail: "Kitchen, bathrooms, floors and dusting throughout.",
         price: "From R680",
         tag: "Residential",
       },
       {
         name: "Deep Clean",
-        detail: "Top-to-bottom reset · inside appliances",
+        detail: "A top-to-bottom reset, including inside appliances.",
         price: "From R1 850",
         tag: "Deep clean",
       },
       {
         name: "Office Half-day",
-        detail: "Workstations · kitchenette · common areas",
+        detail: "Workstations, kitchenette and common areas, four hours.",
         price: "From R1 450",
         tag: "Commercial",
+      },
+      {
+        name: "Carpet Treatment",
+        detail: "Deep extraction and stain treatment for carpets and rugs.",
+        price: "From R480",
+        tag: "Add-on",
+      },
+      {
+        name: "Move-out Clean",
+        detail: "A thorough clean to hand a property over spotless.",
+        price: "From R2 200",
+        tag: "Once-off",
       },
     ],
     formTitle: "Request a clean",
@@ -423,52 +695,22 @@ export const verticals: VerticalConfig[] = [
 export const verticalByKey = (key: string | undefined): VerticalConfig =>
   verticals.find((vertical) => vertical.key === key) ?? (verticals[0] as VerticalConfig);
 
-export type Plan = {
-  name: string;
-  price: string;
-  monthly: string;
-  blurb: string;
-  features: string[];
-  featured?: boolean;
+/** The Empirial Designs launch offer shown on the portfolio page (rand, excl. VAT). */
+export const offer = {
+  name: "Complete business system",
+  price: "R3 000",
+  wasPrice: "R7 500",
+  deposit: "R1 200",
+  depositPercent: 40,
+  totalSpots: 8,
+  spotsLeft: 5,
+  blurb: "Your own website and a back-office system working together, built for your industry.",
+  features: [
+    "A custom website with your branding, photos and services",
+    "Online bookings and enquiries that land in your dashboard",
+    "Register for card and cash sales",
+    "Customers, stock, jobs or appointments for your industry",
+    "Sales reports and staff roles",
+    "Works on your phone, tablet and laptop",
+  ],
 };
-
-/** Indicative Empirial Designs packages shown on the portfolio page (excl. VAT). */
-export const plans: Plan[] = [
-  {
-    name: "Website",
-    price: "R12 500",
-    monthly: "R450 / month hosting & care",
-    blurb: "A beautiful, fast site that wins the first impression.",
-    features: [
-      "Up to 5 custom pages",
-      "Booking or enquiry form",
-      "Mobile-ready and SEO-ready",
-      "Your own domain and email",
-    ],
-  },
-  {
-    name: "Website + Bookings",
-    price: "R24 900",
-    monthly: "R890 / month",
-    blurb: "Customers book online and you see every request in one place.",
-    features: [
-      "Everything in Website",
-      "Live booking calendar",
-      "Requests land in your dashboard",
-      "Customer list built automatically",
-    ],
-    featured: true,
-  },
-  {
-    name: "Complete system",
-    price: "R49 500",
-    monthly: "R1 650 / month",
-    blurb: "Website, register and back office working as one system.",
-    features: [
-      "Everything in Bookings",
-      "POS and card/cash checkout",
-      "Reports, stock and staff roles",
-      "On-site training and support",
-    ],
-  },
-];

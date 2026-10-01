@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Banknote, CreditCard, Delete, Minus, Plus, ScanLine, X } from "lucide-react";
 import { AppShell, Panel, Segmented } from "@/components/AppShell";
 import { BookRoomDialog } from "@/components/BookRoomDialog";
+import { CustomItemDialog, JobDialog } from "@/components/WorkshopDialogs";
 import { Button } from "@/components/ui/button";
 import { nicheConfigs } from "@/lib/platform-data";
 import { useProduct } from "@/lib/product";
@@ -36,6 +37,8 @@ function Register() {
   const [tender, setTender] = useState("");
   const [receipt, setReceipt] = useState("");
   const [bookOpen, setBookOpen] = useState(false);
+  const [jobOpen, setJobOpen] = useState(false);
+  const [itemOpen, setItemOpen] = useState(false);
   const [barcode, setBarcode] = useState("");
   const [split, setSplit] = useState(false);
   const subtotal = cart.reduce((sum, line) => sum + line.price * line.qty, 0);
@@ -72,23 +75,18 @@ function Register() {
     niche === "hospitality"
       ? "Sell a stay"
       : niche === "food"
-        ? "Open a table"
+        ? "Add custom item"
         : niche === "beauty"
           ? "Sell a service"
           : niche === "automotive"
-            ? "Load ready job"
+            ? "Add a job"
             : niche === "cleaning"
-              ? "Charge one-off job"
-              : "Scan product";
+              ? "Charge a job"
+              : "Custom item";
   const action = () => {
     if (niche === "hospitality") setBookOpen(true);
-    else
-      addToCart({
-        id: `${niche}-action`,
-        name: actionLabel.replace(/^(Sell|Open|Load|Charge) /, ""),
-        price: niche === "automotive" ? 4820 : niche === "cleaning" ? 1850 : 680,
-        note: `Added from ${config.shortLabel}`,
-      });
+    else if (niche === "automotive") setJobOpen(true);
+    else setItemOpen(true);
   };
   const onBarcode = () => {
     const found =
@@ -337,6 +335,35 @@ function Register() {
           </Panel>
         </div>
       </div>
+      <CustomItemDialog
+        open={itemOpen}
+        onClose={() => setItemOpen(false)}
+        title={actionLabel}
+        itemLabel={
+          niche === "beauty" ? "Service" : niche === "cleaning" ? "Job or service" : "Item"
+        }
+        onAdd={(item) =>
+          addToCart({
+            id: `${niche}-custom-${item.name}`,
+            name: item.name,
+            price: item.price,
+            note: item.customer ? `For ${item.customer}` : `Added from ${config.shortLabel}`,
+          })
+        }
+      />
+      <JobDialog
+        open={jobOpen}
+        onClose={() => setJobOpen(false)}
+        title="Add a job to the check"
+        onCreated={(job) =>
+          addToCart({
+            id: job.id,
+            name: `${job.vehicle} · ${job.work}`,
+            price: job.estimate,
+            note: `${job.id} · ${job.customer}`,
+          })
+        }
+      />
       <BookRoomDialog
         open={bookOpen}
         onClose={() => setBookOpen(false)}

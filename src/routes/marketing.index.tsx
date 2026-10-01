@@ -1,32 +1,27 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Check, LayoutDashboard } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { plans, verticals } from "@/lib/marketing-data";
+import { offer, verticals } from "@/lib/marketing-data";
 import { pageMeta } from "@/lib/page-meta";
-
-const numberWords = [
-  "Zero",
-  "One",
-  "Two",
-  "Three",
-  "Four",
-  "Five",
-  "Six",
-  "Seven",
-  "Eight",
-  "Nine",
-];
-const count = numberWords[verticals.length] ?? String(verticals.length);
 
 export const Route = createFileRoute("/marketing/")({
   head: () =>
     pageMeta(
-      `Empirial Designs · ${count} customer experiences`,
-      "Customer-facing websites and back-office systems for hotels, restaurants, retail, salons, auto workshops, property and cleaning businesses.",
+      "Empirial Designs · Get a complete business system",
+      "A demo of a website and back-office system built for hotels, restaurants, retail, salons, auto workshops, property and cleaning businesses.",
       "summary_large_image",
     ),
   component: MarketingPortfolio,
 });
+
+const benefits = [
+  "Customers book or buy on your own website",
+  "Every booking lands in your dashboard automatically",
+  "Take card and cash payments at the register",
+  "Track stock, jobs, appointments and staff in one place",
+  "See sales and customers in simple reports",
+  "Runs on your phone, tablet or laptop, whenever you need it",
+];
 
 function MarketingPortfolio() {
   return (
@@ -48,18 +43,32 @@ function MarketingPortfolio() {
         </div>
       </header>
       <main>
-        <section className="mx-auto max-w-7xl px-5 pb-12 pt-16 lg:px-8 lg:pt-24">
+        <section className="mx-auto max-w-7xl px-5 pb-10 pt-6 lg:px-8 lg:pb-12 lg:pt-8">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
             Our portfolio
           </p>
-          <h1 className="mt-4 max-w-4xl font-display text-5xl font-semibold leading-[1.03] sm:text-6xl lg:text-7xl">
-            {count} businesses. {count} distinct ways to welcome a customer.
-          </h1>
-          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-            Choose an Empirial business to enter its complete customer experience. Book, buy or
-            enquire, then press Management to watch the request arrive in that business's back
-            office.
-          </p>
+          <div className="mt-3 grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-end lg:gap-14">
+            <div>
+              <h1 className="font-display text-5xl font-semibold leading-[1.03] sm:text-6xl lg:text-7xl">
+                Get a complete business system
+              </h1>
+              <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
+                This is a demo of how you could run your business in your own time. Pick an industry
+                below, book or buy as a customer would, then press Management to watch the request
+                arrive in the back office.
+              </p>
+            </div>
+            <ul className="grid gap-3 border-t border-line pt-6 sm:grid-cols-2 lg:border-l lg:border-t-0 lg:pl-10 lg:pt-0">
+              {benefits.map((benefit) => (
+                <li key={benefit} className="flex items-start gap-3 text-sm leading-snug">
+                  <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-foreground text-background">
+                    <Check className="size-3" />
+                  </span>
+                  {benefit}
+                </li>
+              ))}
+            </ul>
+          </div>
         </section>
         <section className="mx-auto grid max-w-7xl gap-4 px-5 pb-20 md:grid-cols-2 lg:px-8">
           {verticals.map((site, index) => (
@@ -67,13 +76,14 @@ function MarketingPortfolio() {
               key={site.key}
               to="/marketing/$vertical"
               params={{ vertical: site.key }}
-              className={`group relative min-h-[420px] overflow-hidden ${index === 0 ? "md:col-span-2" : ""}`}
+              className={`group relative min-h-[440px] overflow-hidden ${index === 0 ? "md:col-span-2" : ""}`}
             >
               <img
                 src={site.hero}
                 alt={site.brand}
                 width={1600}
                 height={1067}
+                style={{ objectPosition: site.heroPosition }}
                 className="absolute inset-0 size-full object-cover transition-transform duration-700 group-hover:scale-[1.025]"
               />
               <div className="portfolio-card-wash absolute inset-0" />
@@ -83,7 +93,12 @@ function MarketingPortfolio() {
                     {site.category}
                   </p>
                   <h2 className="mt-2 font-display text-4xl font-semibold">{site.brand}</h2>
-                  <p className="mt-2 max-w-lg text-sm text-primary-foreground/80">{site.sub}</p>
+                  <p className="mt-3 max-w-xl text-sm leading-relaxed text-primary-foreground/85">
+                    <span className="font-semibold text-primary-foreground">
+                      The problem it solves:{" "}
+                    </span>
+                    {site.solves}
+                  </p>
                 </div>
                 <span className="grid size-11 shrink-0 place-items-center rounded-full bg-primary-foreground text-primary transition-transform group-hover:translate-x-1">
                   <ArrowRight className="size-4" />
@@ -98,43 +113,64 @@ function MarketingPortfolio() {
               Pricing
             </p>
             <h2 className="mt-4 max-w-3xl font-display text-4xl font-semibold leading-tight sm:text-5xl">
-              Start with a website. Grow into a complete system.
+              One complete system. One launch price.
             </h2>
-            <p className="mt-4 max-w-2xl text-muted-foreground">
-              Once-off build price plus a simple monthly fee. Every package is tailored to your
-              business, and prices exclude VAT.
-            </p>
-            <div className="mt-10 grid gap-4 md:grid-cols-3">
-              {plans.map((plan) => (
-                <article
-                  key={plan.name}
-                  className={`flex flex-col border bg-background p-7 ${plan.featured ? "border-foreground" : "border-line"}`}
+            <article className="mt-10 grid overflow-hidden border border-foreground bg-background lg:grid-cols-[0.9fr_1.1fr]">
+              <div className="bg-foreground p-8 text-background sm:p-10">
+                <span className="inline-block border border-background/40 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em]">
+                  First {offer.totalSpots} businesses · only {offer.spotsLeft} spots left
+                </span>
+                <h3 className="mt-6 font-display text-2xl font-semibold">{offer.name}</h3>
+                <p className="mt-6 flex items-end gap-4">
+                  <span className="font-display text-6xl font-semibold leading-none sm:text-7xl">
+                    {offer.price}
+                  </span>
+                  <span className="pb-1 text-xl text-background/55 line-through">
+                    {offer.wasPrice}
+                  </span>
+                </p>
+                <p className="mt-3 text-sm text-background/70">
+                  Launch price in rand. Normally {offer.wasPrice}.
+                </p>
+                <p className="mt-6 text-sm">
+                  Secure your spot with a {offer.depositPercent}% deposit of{" "}
+                  <strong>{offer.deposit}</strong>.
+                </p>
+                <div
+                  className="mt-6"
+                  aria-label={`${offer.spotsLeft} of ${offer.totalSpots} spots left`}
                 >
-                  <div className="flex items-center justify-between">
-                    <h3 className="font-display text-xl font-semibold">{plan.name}</h3>
-                    {plan.featured && (
-                      <span className="bg-foreground px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-background">
-                        Most chosen
-                      </span>
-                    )}
-                  </div>
-                  <p className="mt-5 font-display text-4xl font-semibold">{plan.price}</p>
-                  <p className="mt-1 text-sm text-muted-foreground">{plan.monthly}</p>
-                  <p className="mt-5 text-sm leading-relaxed">{plan.blurb}</p>
-                  <ul className="mt-6 flex-1 space-y-3">
-                    {plan.features.map((feature) => (
-                      <li key={feature} className="flex items-start gap-3 text-sm">
-                        <Check className="mt-0.5 size-4 shrink-0" />
-                        {feature}
-                      </li>
+                  <div className="flex gap-1.5">
+                    {Array.from({ length: offer.totalSpots }, (_, index) => (
+                      <span
+                        key={index}
+                        className={`h-2 flex-1 ${index < offer.totalSpots - offer.spotsLeft ? "bg-background/25" : "bg-background"}`}
+                      />
                     ))}
-                  </ul>
-                  <Button asChild variant={plan.featured ? "default" : "outline"} className="mt-8">
-                    <a href="tel:0651859143">Call 065 185 9143</a>
-                  </Button>
-                </article>
-              ))}
-            </div>
+                  </div>
+                  <p className="mt-2 text-xs text-background/70">
+                    {offer.totalSpots - offer.spotsLeft} of {offer.totalSpots} spots taken
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-col p-8 sm:p-10">
+                <p className="text-base leading-relaxed">{offer.blurb}</p>
+                <ul className="mt-6 flex-1 space-y-3">
+                  {offer.features.map((feature) => (
+                    <li key={feature} className="flex items-start gap-3 text-sm">
+                      <Check className="mt-0.5 size-4 shrink-0" />
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+                <Button asChild size="lg" className="mt-8 self-start">
+                  <a href="tel:0651859143">
+                    Claim a spot · 065 185 9143
+                    <ArrowRight />
+                  </a>
+                </Button>
+              </div>
+            </article>
           </div>
         </section>
       </main>

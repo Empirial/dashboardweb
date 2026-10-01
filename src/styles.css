@@ -397,3 +397,11 @@
     inset-inline: 1.5rem;
   }
 }
+
+html {
+  scroll-behavior: smooth;
+}
+
+[id] {
+  scroll-margin-top: 5.5rem;
+}

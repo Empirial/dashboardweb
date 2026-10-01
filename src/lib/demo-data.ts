@@ -3,7 +3,7 @@
 // Overview, Reports, Customers and module pages read it back, so the demo behaves like
 // one connected system. Everything is saved to localStorage and can be reset in Settings.
 import { useMemo } from "react";
-import { rand, type Room } from "./hotel-data";
+import { rand, rooms, type Room } from "./hotel-data";
 import type { VerticalConfig } from "./marketing-data";
 import { createPersistedStore } from "./persisted-store";
 import {
@@ -13,7 +13,17 @@ import {
   type NicheConfig,
 } from "./platform-data";
 import type { Niche } from "./product";
-import { addReservation, freeRooms, getReservations, parseDay, shortDay } from "./reservations";
+import {
+  TODAY,
+  addDays,
+  addReservation,
+  freeRooms,
+  getReservations,
+  nightsOf,
+  parseDay,
+  shortDay,
+  type Reservation,
+} from "./reservations";
 
 export type Sale = {
   id: string;
@@ -31,6 +41,8 @@ type Live = {
   feed: FeedItem[];
   records: Partial<Record<ModuleKey, ModuleRecord[]>>;
   customers: LiveCustomer[];
+  /** Status changes made to bookings, keyed by booking reference. */
+  bookingStatus?: Record<string, string>;
 };
 
 const live = createPersistedStore<Live>("live", {
@@ -73,7 +85,7 @@ export function useRevenue(niche: Niche) {
 
 const stamp = () => new Date().toTimeString().slice(0, 5);
 const uid = () => Math.random().toString(36).slice(2, 8);
-const initialsOf = (name: string) =>
+export const initialsOf = (name: string) =>
   name
     .split(/\s+/)
     .filter(Boolean)
@@ -163,7 +175,13 @@ export function submitEnquiry(
           : 0;
       if (nights < 1)
         return { ok: false, message: "Choose a check-out date after your check-in date." };
-      const preferred: Room["type"] = /suite|villa/i.test(selected) ? "Suite" : "Deluxe";
+      const preferred: Room["type"] = /suite|villa/i.test(selected)
+        ? "Suite"
+        : /twin/i.test(selected)
+          ? "Twin"
+          : /single/i.test(selected)
+            ? "Single"
+            : "Deluxe";
       const list = getReservations();
       const room =
         freeRooms(list, start, nights, preferred)[0] ?? freeRooms(list, start, nights)[0];
@@ -273,3 +291,252 @@ export function submitEnquiry(
       return { ok: true, message: `Your clean is requested for ${when}. We'll confirm shortly.` };
   }
 }
+
+// ---------------------------------------------------------------------------
+// Automotive workshop helpers (job cards, quotes, parts, live KPIs)
+// ---------------------------------------------------------------------------
+
+export const numberIn = (text: string | number) => Number(String(text).replace(/[^0-9]/g, "")) || 0;
+
+const nextNumber = (records: ModuleRecord[], pattern: RegExp, first: number) =>
+  Math.max(first - 1, ...records.map((record) => Number(pattern.exec(record.name)?.[1] ?? 0))) + 1;
+
+export const jobStatuses = [
+  "Booked in",
+  "In progress",
+  "Awaiting parts",
+  "Ready for collection",
+  "Completed",
+] as const;
+export const quoteStatuses = ["Pending", "Approved", "Paid"] as const;
+
+export function addJob(input: {
+  customer: string;
+  vehicle: string;
+  phone: string;
+  work: string;
+  estimate: number;
+}) {
+  const id = `EMP-J${nextNumber(currentRecords("jobs"), /EMP-J(\d+)/, 100)}`;
+  addModuleRecord("jobs", {
+    name: `${id} · ${input.vehicle}`,
+    detail: `${input.customer} · ${input.work}`,
+    status: "Booked in",
+    value: input.estimate ? rand(input.estimate) : "Quote",
+    date: TODAY,
+  });
+  addCustomer({
+    niche: "automotive",
+    name: input.customer,
+    initials: initialsOf(input.customer),
+    detail: input.vehicle,
+    meta: "Job in progress",
+    value: "New",
+    phone: input.phone,
+    vehicle: input.vehicle,
+    problem: input.work,
+  });
+  addFeed("automotive", "Job card opened", `${id} · ${input.vehicle}`);
+  return id;
+}
+
+export function addQuote(input: {
+  customer: string;
+  vehicle: string;
+  issue: string;
+  amount: number;
+}) {
+  const id = `Q-${nextNumber(currentRecords("quotes"), /Q-(\d+)/, 1087)}`;
+  addModuleRecord("quotes", {
+    name: `${id} · ${input.customer}`,
+    detail: input.vehicle ? `${input.vehicle} · ${input.issue}` : input.issue,
+    status: "Pending",
+    value: input.amount ? rand(input.amount) : "TBC",
+  });
+  addFeed("automotive", "Quote created", `${id} · ${input.customer}`);
+  return id;
+}
+
+export function addPart(input: {
+  kind: "stock" | "customer";
+  name: string;
+  qty: number;
+  supplier: string;
+  customer: string;
+}) {
+  const forCustomer = input.kind === "customer";
+  addModuleRecord("parts", {
+    name: input.name,
+    detail: forCustomer
+      ? `For ${input.customer}${input.supplier ? ` · ${input.supplier}` : ""}`
+      : input.supplier || "Workshop stock",
+    status: forCustomer ? "Customer part" : input.qty <= 5 ? "Low stock" : "In stock",
+    value: input.qty,
+  });
+  addFeed(
+    "automotive",
+    forCustomer ? "Customer part logged" : "Stock part added",
+    `${input.name} · ${input.qty}`,
+  );
+}
+
+/** Workshop KPIs computed from the live job, quote and part records. */
+export function automotiveKpis(records: Live["records"]): NicheConfig["kpis"] {
+  const jobs = records.jobs ?? moduleRecords.jobs ?? [];
+  const quotes = records.quotes ?? moduleRecords.quotes ?? [];
+  const parts = records.parts ?? moduleRecords.parts ?? [];
+  const open = jobs.filter((job) => !/complete|collected/i.test(job.status));
+  const pending = quotes.filter((quote) => /pending|draft/i.test(quote.status));
+  const pendingValue = pending.reduce((sum, quote) => sum + numberIn(quote.value), 0);
+  return [
+    {
+      label: "Open jobs",
+      value: String(open.length),
+      sub: `${open.filter((job) => /progress/i.test(job.status)).length} in progress`,
+    },
+    {
+      label: "Ready for collection",
+      value: String(jobs.filter((job) => /ready/i.test(job.status)).length),
+      sub: "Customers to call",
+    },
+    {
+      label: "Awaiting parts",
+      value: String(jobs.filter((job) => /awaiting/i.test(job.status)).length),
+      sub: `${parts.filter((part) => /low/i.test(part.status)).length} parts low on stock`,
+    },
+    {
+      label: "Quotes pending",
+      value: String(pending.length),
+      sub: `${rand(pendingValue)} waiting for a yes`,
+    },
+  ];
+}
+
+/** Overview KPIs for every industry, computed from the live records instead of fixed numbers. */
+export function liveKpis(
+  niche: Niche,
+  base: NicheConfig["kpis"],
+  records: Live["records"],
+  reservations: Reservation[],
+  salesTotal: number,
+  salesCount: number,
+): NicheConfig["kpis"] {
+  const get = (key: ModuleKey) => records[key] ?? moduleRecords[key] ?? [];
+  const n = (list: ModuleRecord[], pattern: RegExp) =>
+    list.filter((record) => pattern.test(record.status)).length;
+  const sum = (list: ModuleRecord[]) =>
+    list.reduce((total, record) => total + numberIn(record.value), 0);
+
+  switch (niche) {
+    case "automotive":
+      return automotiveKpis(records);
+    case "hospitality": {
+      const sellable = rooms.filter((room) => room.status !== "ooo").length;
+      const inHouse = reservations.filter((r) => nightsOf(r).includes(TODAY));
+      const averageRate = inHouse.length
+        ? Math.round(inHouse.reduce((total, r) => total + r.rate, 0) / inHouse.length)
+        : 0;
+      return [
+        {
+          label: "Occupancy",
+          value: `${Math.round((inHouse.length / sellable) * 100)}%`,
+          sub: `${inHouse.length} of ${sellable} rooms tonight`,
+        },
+        { label: "Average rate", value: rand(averageRate), sub: "Rooms in house tonight" },
+        {
+          label: "Arrivals",
+          value: String(reservations.filter((r) => r.start === TODAY).length),
+          sub: "Due today",
+        },
+        {
+          label: "Departures",
+          value: String(reservations.filter((r) => addDays(r.start, r.nights) === TODAY).length),
+          sub: "Checking out today",
+        },
+      ];
+    }
+    case "food": {
+      const tables = get("floor-plan");
+      const kitchen = get("kitchen");
+      const occupied = tables.filter((table) =>
+        /seated|ordered|awaiting|ready/i.test(table.status),
+      );
+      return [
+        {
+          label: "Tables occupied",
+          value: String(occupied.length),
+          sub: `of ${tables.length} tables`,
+        },
+        {
+          label: "Open checks",
+          value: String(n(tables, /ordered|awaiting|seated/i)),
+          sub: `${rand(sum(occupied))} live`,
+        },
+        {
+          label: "Reserved",
+          value: String(n(tables, /reserved/i)),
+          sub: "Tables held for bookings",
+        },
+        {
+          label: "Kitchen queue",
+          value: String(n(kitchen, /queued|cooking/i)),
+          sub: `${n(kitchen, /ready/i)} ready`,
+        },
+      ];
+    }
+    case "retail": {
+      const stock = get("inventory");
+      return [
+        {
+          label: "Sales today",
+          value: rand(48240 + salesTotal),
+          sub: `${126 + salesCount} transactions`,
+        },
+        { label: "Low stock", value: String(n(stock, /low/i)), sub: "Needs reordering" },
+        { label: "Products", value: String(stock.length), sub: "Stock lines tracked" },
+        { label: "Units on hand", value: String(sum(stock)), sub: "Across all products" },
+      ];
+    }
+    case "beauty": {
+      const diary = get("appointments");
+      return [
+        {
+          label: "Appointments",
+          value: String(diary.length),
+          sub: `${n(diary, /confirmed|in service/i)} still to come`,
+        },
+        {
+          label: "Completed",
+          value: String(n(diary, /completed/i)),
+          sub: "Done and ready to bill",
+        },
+        { label: "No-shows", value: String(n(diary, /no-show/i)), sub: "Missed appointments" },
+        { label: "Service sales", value: rand(21680 + salesTotal), sub: "This week" },
+      ];
+    }
+    case "cleaning": {
+      const visits = get("scheduling");
+      const billing = get("billing");
+      const crews = get("crew");
+      const due = billing.filter((plan) => /due/i.test(plan.status));
+      return [
+        {
+          label: "Visits scheduled",
+          value: String(visits.length),
+          sub: `${n(visits, /scheduled/i)} still to do`,
+        },
+        { label: "Completed", value: String(n(visits, /completed/i)), sub: "Done today" },
+        { label: "Invoices due", value: String(due.length), sub: `${rand(sum(due))} to collect` },
+        { label: "Crews", value: String(crews.length), sub: `${n(crews, /available/i)} available` },
+      ];
+    }
+    default:
+      return base;
+  }
+}
+
+export const setBookingStatus = (ref: string, status: string) =>
+  live.set((current) => ({
+    ...current,
+    bookingStatus: { ...(current.bookingStatus ?? {}), [ref]: status },
+  }));
