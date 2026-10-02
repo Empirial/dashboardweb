@@ -26,6 +26,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { verticals, type VerticalConfig, type VerticalKey } from "@/lib/marketing-data";
 import { submitEnquiry } from "@/lib/demo-data";
+import { useOfferings } from "@/lib/site-offerings";
 import { useProduct } from "@/lib/product";
 import { exampleDateOffsets, exampleFor, startTour, useTour } from "@/lib/tour";
 import { TODAY, dayKey, parseDay } from "@/lib/reservations";
@@ -53,7 +54,8 @@ export function BusinessSite({
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [bookingOpen, setBookingOpen] = useState(false);
-  const [selected, setSelected] = useState(config.offerings[0]?.name ?? config.brand);
+  const { all: offerings } = useOfferings(config);
+  const [selected, setSelected] = useState(offerings[0]?.name ?? config.brand);
   const [bagCount, setBagCount] = useState(0);
   const { setNiche } = useProduct();
   const navigate = useNavigate();
@@ -487,6 +489,7 @@ function OfferingGrid({
   onAction: (name: string) => void;
   expanded?: boolean;
 }) {
+  const { all: offerings } = useOfferings(config);
   return (
     <section id="services" className="site-band">
       <div className="mx-auto grid max-w-7xl gap-10 px-5 py-20 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16 lg:px-8">
@@ -516,7 +519,7 @@ function OfferingGrid({
           )}
         </div>
         <ol className="border-b border-line">
-          {config.offerings.map((item, index) => (
+          {offerings.map((item, index) => (
             <li key={item.name} className="border-t border-line">
               <button
                 type="button"

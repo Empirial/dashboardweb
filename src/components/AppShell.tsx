@@ -7,6 +7,7 @@ import {
   CarFront,
   ChevronLeft,
   ClipboardList,
+  Globe,
   LayoutDashboard,
   LineChart,
   Package,
@@ -35,6 +36,7 @@ const core = [
   { to: "/pos", label: "Register", icon: Receipt },
   { to: "/customers", label: "Customers", icon: Users },
   { to: "/reports", label: "Reports", icon: LineChart },
+  { to: "/website", label: "Website", icon: Globe },
   { to: "/settings", label: "Settings", icon: Settings },
 ] as const;
 
@@ -78,7 +80,7 @@ export function AppShell({
     icon: moduleIcons[module.key],
   }));
   const allNav = [...core.slice(0, 2), ...moduleNav, ...core.slice(2)];
-  const mobileNav = [...core.slice(0, 2), ...moduleNav.slice(0, 1), core[2], core[4]];
+  const mobileNav = [...core.slice(0, 2), ...moduleNav.slice(0, 1), core[2], core[5]];
 
   return (
     <div

@@ -31,6 +31,7 @@ import { Route as RoomsRouteImport } from './routes/rooms'
 import { Route as SchedulingRouteImport } from './routes/scheduling'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as StaffRouteImport } from './routes/staff'
+import { Route as WebsiteRouteImport } from './routes/website'
 import { Route as MarketingIndexRouteImport } from './routes/marketing.index'
 import { Route as MarketingVerticalRouteImport } from './routes/marketing.$vertical'
 import { Route as MarketingVerticalAboutRouteImport } from './routes/marketing.$vertical.about'
@@ -146,6 +147,11 @@ const StaffRoute = StaffRouteImport.update({
   path: '/staff',
   getParentRoute: () => rootRouteImport,
 } as any)
+const WebsiteRoute = WebsiteRouteImport.update({
+  id: '/website',
+  path: '/website',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MarketingIndexRoute = MarketingIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -191,6 +197,7 @@ export interface FileRoutesByFullPath {
   '/scheduling': typeof SchedulingRoute
   '/settings': typeof SettingsRoute
   '/staff': typeof StaffRoute
+  '/website': typeof WebsiteRoute
   '/marketing/$vertical': typeof MarketingVerticalRouteWithChildren
   '/marketing/': typeof MarketingIndexRoute
   '/marketing/$vertical/about': typeof MarketingVerticalAboutRoute
@@ -218,6 +225,7 @@ export interface FileRoutesByTo {
   '/scheduling': typeof SchedulingRoute
   '/settings': typeof SettingsRoute
   '/staff': typeof StaffRoute
+  '/website': typeof WebsiteRoute
   '/marketing/$vertical': typeof MarketingVerticalRouteWithChildren
   '/marketing': typeof MarketingIndexRoute
   '/marketing/$vertical/about': typeof MarketingVerticalAboutRoute
@@ -247,6 +255,7 @@ export interface FileRoutesById {
   '/scheduling': typeof SchedulingRoute
   '/settings': typeof SettingsRoute
   '/staff': typeof StaffRoute
+  '/website': typeof WebsiteRoute
   '/marketing/$vertical': typeof MarketingVerticalRouteWithChildren
   '/marketing/': typeof MarketingIndexRoute
   '/marketing/$vertical/about': typeof MarketingVerticalAboutRoute
@@ -277,6 +286,7 @@ export interface FileRouteTypes {
     | '/scheduling'
     | '/settings'
     | '/staff'
+    | '/website'
     | '/marketing/$vertical'
     | '/marketing/'
     | '/marketing/$vertical/about'
@@ -304,6 +314,7 @@ export interface FileRouteTypes {
     | '/scheduling'
     | '/settings'
     | '/staff'
+    | '/website'
     | '/marketing/$vertical'
     | '/marketing'
     | '/marketing/$vertical/about'
@@ -332,6 +343,7 @@ export interface FileRouteTypes {
     | '/scheduling'
     | '/settings'
     | '/staff'
+    | '/website'
     | '/marketing/$vertical'
     | '/marketing/'
     | '/marketing/$vertical/about'
@@ -361,6 +373,7 @@ export interface RootRouteChildren {
   SchedulingRoute: typeof SchedulingRoute
   SettingsRoute: typeof SettingsRoute
   StaffRoute: typeof StaffRoute
+  WebsiteRoute: typeof WebsiteRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -519,6 +532,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StaffRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/website': {
+      id: '/website'
+      path: '/website'
+      fullPath: '/website'
+      preLoaderRoute: typeof WebsiteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/marketing/': {
       id: '/marketing/'
       path: '/'
@@ -600,6 +620,7 @@ const rootRouteChildren: RootRouteChildren = {
   SchedulingRoute: SchedulingRoute,
   SettingsRoute: SettingsRoute,
   StaffRoute: StaffRoute,
+  WebsiteRoute: WebsiteRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

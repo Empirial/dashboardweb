@@ -14,6 +14,7 @@ import {
   type NicheConfig,
 } from "./platform-data";
 import type { Niche } from "./product";
+import { getOfferings } from "./site-offerings";
 import {
   TODAY,
   addDays,
@@ -163,7 +164,7 @@ export function submitEnquiry(
   const date = values["Preferred date"] ?? "";
   const when = date ? shortDay(date) : "Unscheduled";
   const price = priceOf(
-    config.offerings.find((offering) => offering.name === selected)?.price ?? "",
+    getOfferings(config).find((offering) => offering.name === selected)?.price ?? "",
   );
   const customer = (detail: string, meta: string, value: string) =>
     addCustomer({ niche, name, initials: initialsOf(name), detail, meta, value });
