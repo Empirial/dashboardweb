@@ -1,0 +1,1 @@
+A guest books a room on the hotel's website. Seconds later it's on the room board in the owner's dashboard. One system: website, bookings and register. Built by Empirial Designs.
