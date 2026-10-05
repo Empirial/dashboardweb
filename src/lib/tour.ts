@@ -159,7 +159,7 @@ export function buildSteps(config: VerticalConfig): TourStep[] {
       body: "Head back to the Overview.",
       targets: ['[data-tour="nav-overview"]'],
       goto: "/pos",
-      done: (c) => c.path === "/",
+      done: (c) => c.path === "/overview",
     },
     {
       id: "chart",
@@ -167,7 +167,7 @@ export function buildSteps(config: VerticalConfig): TourStep[] {
       body: "Today's bar and the revenue total include the sale you just rang up.",
       targets: ['[data-tour="revenue-chart"]'],
       manual: true,
-      goto: "/",
+      goto: "/overview",
       done: () => false,
     },
     {

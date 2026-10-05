@@ -39,7 +39,7 @@ export type VerticalConfig = {
   experience: string;
   closingTitle: string;
   closingText: string;
-  managementPath: "/" | "/scheduling" | "/inventory" | "/appointments" | "/jobs" | "/floor-plan";
+  managementPath: "/overview" | "/scheduling" | "/inventory" | "/appointments" | "/jobs" | "/floor-plan";
   managementNiche: Niche;
   highlights: [string, string, string];
   /** One line per highlight, shown on the strip under the hero. */
@@ -101,7 +101,7 @@ export const verticals: VerticalConfig[] = [
       "Start with breakfast on the terrace, spend the afternoon exploring, and return to a room prepared for a quiet evening. Your stay moves at your pace.",
     closingTitle: "Ready for your home from home?",
     closingText: "Choose your room and dates, and begin planning a restorative stay.",
-    managementPath: "/",
+    managementPath: "/overview",
     managementNiche: "hospitality",
     highlights: ["Breakfast included", "Private terraces", "Flexible check-in"],
     offerings: [

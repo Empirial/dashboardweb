@@ -29,10 +29,10 @@ import { DemoGuide } from "@/components/DemoGuide";
 import { TODAY, shortDay } from "@/lib/reservations";
 
 // Guided-tour targets for the navigation links.
-const navTourId: Record<string, string> = { "/": "nav-overview", "/pos": "nav-register" };
+const navTourId: Record<string, string> = { "/overview": "nav-overview", "/pos": "nav-register" };
 
 const core = [
-  { to: "/", label: "Overview", icon: LayoutDashboard },
+  { to: "/overview", label: "Overview", icon: LayoutDashboard },
   { to: "/pos", label: "Register", icon: Receipt },
   { to: "/customers", label: "Customers", icon: Users },
   { to: "/reports", label: "Reports", icon: LineChart },
@@ -108,7 +108,7 @@ export function AppShell({
               key={item.to}
               to={item.to}
               data-tour={navTourId[item.to]}
-              activeOptions={{ exact: item.to === "/" }}
+              activeOptions={{ exact: item.to === "/overview" }}
               title={item.label}
               className="flex h-10 items-center gap-3 rounded-xl px-3 text-[13px] font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
               activeProps={{ className: "bg-primary text-primary-foreground" }}
@@ -176,7 +176,7 @@ export function AppShell({
             key={item.to}
             to={item.to}
             data-tour={navTourId[item.to]}
-            activeOptions={{ exact: item.to === "/" }}
+            activeOptions={{ exact: item.to === "/overview" }}
             className="flex min-w-0 flex-1 flex-col items-center gap-1 rounded-xl py-2 text-[9px] font-medium text-muted-foreground"
             activeProps={{ className: "bg-primary text-primary-foreground" }}
           >

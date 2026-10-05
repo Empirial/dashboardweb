@@ -36,7 +36,7 @@ function MarketingPortfolio() {
               <a href="#pricing">Pricing</a>
             </Button>
             <Button variant="outline" asChild>
-              <Link to="/">
+              <Link to="/overview">
                 <LayoutDashboard />
                 Management
               </Link>
