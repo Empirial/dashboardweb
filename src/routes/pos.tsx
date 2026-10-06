@@ -32,7 +32,11 @@ type Payment = "Card" | "Cash";
 function Register() {
   const { niche, cart, setCart, addToCart } = useProduct();
   const config = nicheConfigs[niche];
-  const [category, setCategory] = useState(config.categories[0] ?? "All");
+  const [pickedCategory, setCategory] = useState(config.categories[0] ?? "All");
+  // The saved industry loads after first render, so fall back when the picked category belongs to another one.
+  const category = config.categories.includes(pickedCategory)
+    ? pickedCategory
+    : (config.categories[0] ?? "All");
   const [payment, setPayment] = useState<Payment | null>(null);
   const [tender, setTender] = useState("");
   const [receipt, setReceipt] = useState("");
