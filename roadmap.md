@@ -8,9 +8,11 @@
 - [x] Validate desktop, mobile, route metadata, and key interactions
 
 ## Marketing website
+
 - [x] Public Empirial Designs portfolio with five image-led customer websites
 - [x] Hotel booking, Property viewing, Retail cart, Salon appointment, and Auto service prototype journeys
 - [x] Dedicated home, about, and offering routes for every business
 - [x] Six-section landing pages with glass navigation and contextual Management links
 - [x] Numbered month-grid calendars for dated customer requests
+- [x] Owners can add, edit, price, hide and restore website services and products from the dashboard
 - [ ] Replace placeholder pricing figures with real ones

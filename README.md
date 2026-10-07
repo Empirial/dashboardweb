@@ -24,6 +24,9 @@ Everything is mock data stored in the browser (`localStorage`), so it persists a
   (room board and bookings, floor plan, inventory, appointments, job cards, schedule), in the
   Overview activity feed and in Customers.
 - A retail order reduces stock. A register sale adds to Overview and Reports revenue.
+- **Website** (dashboard): the owner adds, edits, prices and removes services or products, and can
+  edit or hide the built-in ones (with a restore button). The marketing site and its enquiry form
+  update straight away.
 - **Settings → Reset demo** clears all saved demo data. The floating **Demo guide** walks a
   prospect through a suggested path for the active industry.
 
