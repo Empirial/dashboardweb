@@ -59,8 +59,7 @@ its `key` in `submitEnquiry` in `demo-data.ts`.
 
 ## Deployment
 
-Builds with the Nitro **Vercel** preset (`vite.config.ts`). The project is also connected to
-[Lovable](https://lovable.dev); avoid rewriting pushed git history.
+Builds with the Nitro **Vercel** preset (`vite.config.ts`).
 
 ## Known limits (it is a demo)
 
